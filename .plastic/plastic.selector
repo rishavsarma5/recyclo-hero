@@ -1,4 +1,0 @@
-repository "GAME3700_RecycloHero@local"
-  path "/"
-    br "/main"
-    co "/main"
