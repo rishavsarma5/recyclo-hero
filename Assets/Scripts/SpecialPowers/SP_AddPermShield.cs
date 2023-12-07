@@ -10,13 +10,15 @@ public class SP_AddPermShield : SpecialPowerOption
 
     private Player player;
 
-    public void Start()
+    public void Awake()
     {
         player = FindObjectOfType<Player>();
     }
+
     public override void PerformAction()
     {
         int value = Dice.DiceRoll(diceSides);
+        player = FindObjectOfType<Player>();
         player.AddPermShield(value * shieldBuffMultiplier);
     }
 }

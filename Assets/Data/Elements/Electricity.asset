@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21be9811e3c9441d9a1fab11874eb2c1, type: 3}
   m_Name: Electricity
   m_EditorClassIdentifier: 
-  description: 
+  elementName: Electricity
+  description: Damage to heavy armor
   color: {r: 1, g: 0.97662324, b: 0, a: 1}

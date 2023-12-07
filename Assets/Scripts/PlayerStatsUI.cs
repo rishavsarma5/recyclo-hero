@@ -58,7 +58,14 @@ public class PlayerStatsUI : MonoBehaviour
 
     public void DisplaySpecialPower(int powerLevel)
     {
-        spSliderText.text = $"{powerLevel}/{healthSlider.maxValue}";
+        spSliderText.text = $"{powerLevel}/{spSlider.maxValue}";
         spSlider.value = powerLevel;
+    }
+
+    public void DisplayUpdatedSpecialPower(int currValue, int newMaxValue)
+    {
+        spSlider.maxValue = newMaxValue;
+        spSliderText.text = $"{currValue}/{spSlider.maxValue}";
+        spSlider.value = currValue;
     }
 }

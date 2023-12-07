@@ -10,13 +10,15 @@ public class SP_DamageAllHealthBars : SpecialPowerOption
 
     private Enemy enemy;
 
-    public void Start()
+    public void Awake()
     {
         enemy = FindObjectOfType<Enemy>();
+        Debug.Log("Enemy set in awake");
     }
 
     public override void PerformAction()
     {
+        enemy = FindObjectOfType<Enemy>();
         if (enemy.currentHeavyArmor != 0)
         {
             for (int i = 0; i < numAttacksPerHealthBar; i++)
