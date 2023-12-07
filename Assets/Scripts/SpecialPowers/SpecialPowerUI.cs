@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class SpecialPowerUI : MonoBehaviour
 {
     public SpecialPowerOption specialPower;
-    public TMP_Text specialPowerTitle;
     public TMP_Text specialPowerDescription;
     public Image specialPowerImage;
 
@@ -30,7 +29,6 @@ public class SpecialPowerUI : MonoBehaviour
     {
         specialPower = _specialPower;
         gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
-        specialPowerTitle.text = specialPower.title;
         specialPowerDescription.text = specialPower.description;
         specialPowerImage.sprite = specialPower.image;
     }
