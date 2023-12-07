@@ -34,6 +34,7 @@ public class CardActions : MonoBehaviour
                 yield return new WaitUntil(() => enemy.attackRollOver);
                 break;
             case CT_Shield shield:
+                player.applyShieldOver = false;
                 StartCoroutine(ApplyShield(shield));
                 yield return new WaitUntil(() => player.applyShieldOver);
                 break;

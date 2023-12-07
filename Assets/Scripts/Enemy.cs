@@ -75,6 +75,7 @@ public class Enemy : MonoBehaviour
         
         if (battleSceneManager.numTurns % 6 == 0) // special attack
         {
+            Debug.Log("special attack incoming!");
             turnNumber = 1;
         }
         Debug.Log($"Num turns is {battleSceneManager.numTurns} so turn number is {turnNumber}");
@@ -87,7 +88,11 @@ public class Enemy : MonoBehaviour
 
         amount = TakeHeavyArmorDamage(amount);
 
+        Debug.Log($"Damage left to block: {amount}");
+
         amount = TakeLightShieldDamage(amount);
+
+        Debug.Log($"enemy health takes leftover {amount} damage");
 
         TakeHealthDamage(amount);
       
@@ -101,12 +106,14 @@ public class Enemy : MonoBehaviour
             if (currentHeavyArmor >= amount)
             {
                 //block all
+                Debug.Log($"heavy armor blocks all {amount} damage");
                 currentHeavyArmor -= amount;
                 amount = 0;
             }
             else
             {
                 //cant block all
+                Debug.Log($"heavy armor blocks {currentHeavyArmor} damage");
                 amount -= currentHeavyArmor;
                 currentHeavyArmor = 0;
             }
@@ -123,12 +130,14 @@ public class Enemy : MonoBehaviour
             if (currentLightShield >= amount)
             {
                 //block all
+                Debug.Log($"light shield blocks rest {amount} damage");
                 currentLightShield -= amount;
                 amount = 0;
             }
             else
             {
                 //cant block all
+                Debug.Log($"light shield blocks additional {currentLightShield} damage");
                 amount -= currentLightShield;
                 currentLightShield = 0;
             }
@@ -142,6 +151,7 @@ public class Enemy : MonoBehaviour
     {
         if (amount > 0)
         {
+            Debug.Log($"enemy health takes leftover {amount} damage");
             currentHealth -= amount;
             enemyStatsUI.DisplayHealth(currentHealth);
         }
@@ -160,17 +170,17 @@ public class Enemy : MonoBehaviour
         {
             case CET_Corrosion:
                 currentHealth -= amount;
-                Debug.Log($"Enemy took {amount} of corrosive damage to health");
+                Debug.Log($"Enemy took {amount} corrosive damage to health");
                 enemyStatsUI.DisplayHealth(currentHealth);
                 break;
             case CET_Water:
                 currentLightShield = Mathf.Max(0, currentLightShield - amount);
-                Debug.Log($"Enemy took {amount} of water damage to light shield");
+                Debug.Log($"Enemy took {amount} water damage to light shield");
                 enemyStatsUI.DisplayLightShield(currentLightShield);
                 break;
             case CET_Electricity:
                 currentHeavyArmor = Mathf.Max(0, currentHeavyArmor - amount);
-                Debug.Log($"Enemy took {amount} of electric damage to heavy armor");
+                Debug.Log($"Enemy took {amount} electric damage to heavy armor");
                 enemyStatsUI.DisplayHeavyArmor(currentHeavyArmor);
                 break;
             default:

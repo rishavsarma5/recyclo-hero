@@ -355,6 +355,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 923381887520656521}
+  - component: {fileID: 6099064807976935301}
   - component: {fileID: 373178459424549912}
   - component: {fileID: 8006500699580498457}
   - component: {fileID: 2842214654346397937}
@@ -388,6 +389,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 49}
   m_SizeDelta: {x: 450, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6099064807976935301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6673637857355541330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc6f3c1e7d59f884fb1ec3176bd8bb59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  specialPower: {fileID: 0}
+  specialPowerTitle: {fileID: 1624172569039788728}
+  specialPowerDescription: {fileID: 6738550375380554844}
+  specialPowerImage: {fileID: 720764670434787736}
 --- !u!114 &373178459424549912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,7 +478,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 373178459424549912}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6099064807976935301}
+        m_TargetAssemblyTypeName: SpecialPowerUI, Assembly-CSharp
+        m_MethodName: SelectSpecialPowerOption
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &2842214654346397937
 CanvasRenderer:
   m_ObjectHideFlags: 0

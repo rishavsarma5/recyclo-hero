@@ -14,7 +14,7 @@ public class SpecialPower : MonoBehaviour
     PlayerStatsUI playerStatsUI;
     EnemyStatsUI enemyStatsUI;
 
-    void Start()
+    void Awake()
     {
         battleSceneManager = FindObjectOfType<BattleSceneManager>();
         playerStatsUI = FindObjectOfType<PlayerStatsUI>();
@@ -22,18 +22,21 @@ public class SpecialPower : MonoBehaviour
         playerCurrentLevel = 0;
         enemyCurrentLevel = 0;
         playerMaxLevel = 12;
-        enemyMaxLevel = 18;
-        playerStatsUI.spSlider.maxValue = playerMaxLevel;
-        enemyStatsUI.spSlider.maxValue = enemyMaxLevel;
+        enemyMaxLevel = 16;
+        playerStatsUI.DisplayUpdatedSpecialPower(playerCurrentLevel, playerMaxLevel);
+        enemyStatsUI.DisplayUpdatedSpecialPower(enemyCurrentLevel, enemyMaxLevel);
     }
 
-    public void IncreasePlayerPowerLevel(int amount)
+    public IEnumerator IncreasePlayerPowerLevel(int amount)
     {
         if (playerCurrentLevel + amount >= playerMaxLevel)
         {
-            battleSceneManager.DisplayPlayerSpecialAttackCards();
+            playerStatsUI.DisplaySpecialPower(playerCurrentLevel + amount);
+            StartCoroutine(battleSceneManager.DisplayPlayerSpecialAttackCards());
+            yield return new WaitUntil(() => battleSceneManager.resetSpecialPowerLevel);
+            battleSceneManager.resetSpecialPowerLevel = false;
             // wrap current Level back to 0 if it exceeds maxLevel
-            playerCurrentLevel = playerMaxLevel - (playerCurrentLevel + amount);
+            playerCurrentLevel = (playerCurrentLevel + amount) - playerMaxLevel;
         } else
         {
             playerCurrentLevel += amount;
@@ -41,15 +44,16 @@ public class SpecialPower : MonoBehaviour
 
         // update player's UI
         playerStatsUI.DisplaySpecialPower(playerCurrentLevel);
+        yield return new WaitForSeconds(0.5f);
     }
 
     public void IncreaseEnemyPowerLevel(int amount)
     {
         if (enemyCurrentLevel + amount >= enemyMaxLevel)
         {
-            battleSceneManager.PerformEnemySpecialAttack();
+            StartCoroutine(battleSceneManager.PerformEnemySpecialPower());
             // wrap current Level back to 0 if it exceeds maxLevel
-            enemyCurrentLevel = enemyMaxLevel - (enemyCurrentLevel + amount);
+            enemyCurrentLevel = (enemyCurrentLevel + amount) - enemyMaxLevel;
         }
         else
         {

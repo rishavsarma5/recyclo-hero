@@ -7,10 +7,14 @@ using System.Linq;
 
 public class BattleSceneManager : MonoBehaviour
 {
-    [Header("Cards")] public List<Card> currentCards = new List<Card>();
+    [Header("Cards")] 
+    public List<Card> currentCards = new List<Card>();
     public CardUI selectedCard;
     public List<CardUI> cardsDisplayed = new List<CardUI>();
-    public List<SpecialPowerOption> specialPowerCards = new List<SpecialPowerOption>();
+    public List<SpecialPowerOption> playerSpecialPowerCards = new List<SpecialPowerOption>();
+    public List<SpecialPowerOption> enemySpecialPowerMoves = new List<SpecialPowerOption>();
+    public List<SpecialPowerUI> playerSpecialPowerCardsDisplayed = new List<SpecialPowerUI>();
+
 
     [Header("Stats")] public Enemy enemy;
     public Player player;
@@ -44,6 +48,7 @@ public class BattleSceneManager : MonoBehaviour
     public Button rollButton;
     public TMP_Text rollButtonText;
     public Button cardActionButton;
+    public GameObject specialPowerMenu;
 
     public TMP_Text cardActionButtonText;
     public TMP_Text phaseText;
@@ -68,7 +73,10 @@ public class BattleSceneManager : MonoBehaviour
     public bool coinsRolled;
     public bool specialPowerRolled;
     public bool rollEnemySpecialPower;
+    public bool specialPowerOptionChosen;
+    public bool resetSpecialPowerLevel;
     public int numTurns;
+
 
 
     private void Awake()
@@ -82,6 +90,8 @@ public class BattleSceneManager : MonoBehaviour
         phase = Phase.Prep;
         numTurns = 1;
         rollEnemySpecialPower = false;
+        specialPowerOptionChosen = false;
+        resetSpecialPowerLevel = false;
     }
 
     public void StartFight()
@@ -194,6 +204,7 @@ public class BattleSceneManager : MonoBehaviour
             phase = Phase.Buy;
             phaseText.text = "BUY PHASE";
             player.UpdateCurrentTempShieldTurns();
+            player.RegeneratePermShield();
             turnText.gameObject.SetActive(false);
             turnImage.gameObject.SetActive(false);
             StartCoroutine(BuyPhase());
@@ -259,7 +270,7 @@ public class BattleSceneManager : MonoBehaviour
         turnText.text = "Player's Turn";
         rollButton.gameObject.SetActive(true);
         rollButtonText.gameObject.SetActive(true);
-        rollButtonText.text = "Roll d6 to increase special power bar this round:";
+        rollButtonText.text = "Roll d6 to increase special power bar:";
         currDiceSides = 6;
 
         continueButton.gameObject.SetActive(false);
@@ -267,30 +278,44 @@ public class BattleSceneManager : MonoBehaviour
         rollButton.gameObject.SetActive(false);
         rollButtonText.gameObject.SetActive(false);
         specialPowerRolled = false;
-        spBar.IncreasePlayerPowerLevel(powerBarIncrement);
+        specialPowerOptionChosen = false;
+        StartCoroutine(spBar.IncreasePlayerPowerLevel(powerBarIncrement));
 
         continueButton.gameObject.SetActive(true);
         yield return new WaitUntil(() => rollEnemySpecialPower);
-
+        rollEnemySpecialPower = false;
         turnText.text = "Enemy's Turn";
         currDiceSides = 6;
 
         int value = Dice.DiceRoll(currDiceSides);
-        Debug.Log($"Enemy rolled a {value} to add to power bar");
+        Debug.Log($"Enemy increased power bar by {value}");
         spBar.IncreaseEnemyPowerLevel(value);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
         ContinueToNextPhase();
 
     }
 
-    public void DisplayPlayerSpecialAttackCards()
+    public IEnumerator DisplayPlayerSpecialAttackCards()
     {
-
+        specialPowerMenu.SetActive(true);
+        for (int i = 0; i < playerSpecialPowerCards.Count; i++)
+        {
+            SpecialPowerUI specialPowerUI = playerSpecialPowerCardsDisplayed[i];
+            specialPowerUI.LoadSpecialPowerUI(playerSpecialPowerCards[i]);
+            specialPowerUI.gameObject.SetActive(true);
+        }
+        yield return new WaitUntil(() => specialPowerOptionChosen);
+        resetSpecialPowerLevel = true;
+        specialPowerOptionChosen = false;
     }
 
-    public void PerformEnemySpecialAttack()
+    
+    public IEnumerator PerformEnemySpecialPower()
     {
-
+        // shuffle the list of enemy's special powers and choose first
+        enemySpecialPowerMoves.Shuffle();
+        enemySpecialPowerMoves[0].PerformAction();
+        yield return new WaitForSeconds(0.5f);
     }
 
     public void ContinueButton()

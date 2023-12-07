@@ -33,22 +33,24 @@ public class Player : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        Debug.Log($"player takes {amount} damage");
-        int originalAmount = amount;
+        int newAmount = amount;
+        Debug.Log($"player takes {newAmount} damage");
+        int originalAmount = newAmount;
+        
         if (currentTempShield > 0)
         {
-            if (currentTempShield >= amount)
+            if (currentTempShield >= newAmount)
             {
                 //block all
-                Debug.Log($"temp shield blocks all {amount} damage");
-                currentTempShield -= amount;
-                amount = 0;
+                Debug.Log($"temp shield blocks all {newAmount} damage");
+                currentTempShield -= newAmount;
+                newAmount = 0;
             }
             else
             {
                 //cant block all
-                Debug.Log($"temp shield blocks {amount - currentTempShield} damage");
-                amount -= currentTempShield;
+                Debug.Log($"temp shield blocks {currentTempShield} damage");
+                newAmount -= currentTempShield;
                 currentTempShield = 0;
             }
 
@@ -66,30 +68,32 @@ public class Player : MonoBehaviour
             UpdateCurrentTempShields(originalAmount);
         }
 
-        if (amount > 0 && currentPermShield > 0)
+        Debug.Log($"After temp shields, amount of damage left to block is {newAmount}");
+
+        if (newAmount > 0 && currentPermShield > 0)
         {
-            if (currentPermShield >= amount)
+            if (currentPermShield >= newAmount)
             {
                 //block all
-                Debug.Log($"perm shield blocks all {amount} damage");
-                currentPermShield -= amount;
-                amount = 0;
+                Debug.Log($"perm shield blocks rest {newAmount} damage");
+                currentPermShield -= newAmount;
+                newAmount = 0;
             }
             else
             {
                 //cant block all
-                Debug.Log($"perm shield blocks {currentPermShield - amount} damage");
-                amount -= currentPermShield;
+                Debug.Log($"perm shield blocks additional {currentPermShield} damage");
+                newAmount -= currentPermShield;
                 currentPermShield = 0;
             }
 
             playerStatsUI.DisplayPermShield(currentPermShield);
         }
 
-        Debug.Log($"player still takes {amount} damage to health");
-        if (amount > 0)
+        Debug.Log($"player still takes {newAmount} damage to health");
+        if (newAmount > 0)
         {
-            currentHealth -= amount;
+            currentHealth -= newAmount;
             playerStatsUI.DisplayHealth(currentHealth);
         }
 
@@ -111,23 +115,27 @@ public class Player : MonoBehaviour
     private void UpdateCurrentTempShields(int amount)
     {
         int numShieldsToRemove = 0;
+        int newAmount = amount;
 
         for (int i = 0; i < tempShields.Count; i++)
         {
-            if (tempShields[i].numShield >= amount)
+            if (tempShields[i].numShield >= newAmount)
             {
-                tempShields[i].numShield -= amount;
-                if (tempShields[i].numShield == 0)
+                if (tempShields[i].numShield - newAmount == 0)
                 {
                     numShieldsToRemove++;
+                    Debug.Log($"Decreasing max temp shield by {tempShields[i].numShield}");
+                    maxTempShield -= tempShields[i].numShield;
                 }
-
+                tempShields[i].numShield -= newAmount;
                 break;
             }
             else
             {
                 //cant block all
-                amount -= tempShields[i].numShield;
+                newAmount -= tempShields[i].numShield;
+                Debug.Log($"Decreasing max temp shield by {tempShields[i].numShield}");
+                maxTempShield -= tempShields[i].numShield;
                 tempShields[i].numShield = 0;
                 numShieldsToRemove++;
             }
@@ -144,7 +152,7 @@ public class Player : MonoBehaviour
             currentTempShield += shield.numShield;
         }
 
-        playerStatsUI.DisplayTempShield(currentTempShield);
+        playerStatsUI.DisplayUpdatedTempShield(currentTempShield, maxTempShield);
     }
 
     public void UpdateCurrentTempShieldTurns()
@@ -155,8 +163,12 @@ public class Player : MonoBehaviour
             tempShields[i].turnsLeft--;
             if (tempShields[i].turnsLeft <= 0)
             {
+                Debug.Log($"temp shield {i} expired");
+                Debug.Log($"Decreasing max temp shield by {tempShields[i].numShield}");
+                maxTempShield -= tempShields[i].numShield;
                 indicesToRemove.Add(i);
             }
+            Debug.Log($"Temp shield {i} now has {tempShields[i].turnsLeft} turns left");
         }
 
         foreach (int i in indicesToRemove)
@@ -178,7 +190,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            playerStatsUI.DisplayTempShield(currentTempShield);
+            playerStatsUI.DisplayUpdatedTempShield(currentTempShield, maxTempShield);
         }
 
         Debug.Log("temp shield turns updated");
@@ -189,15 +201,22 @@ public class Player : MonoBehaviour
         TempShield newTempShield = new(shield.GetTurns(), shield.GetDamageProtection());
         tempShields.Add(newTempShield);
 
-        currentTempShield += newTempShield.numShield;
-        maxTempShield += newTempShield.numShield;
+        // TODO: Look into if this makes sense
+        if (currentTempShield + newTempShield.numShield > maxTempShield)
+        {
+            currentTempShield += newTempShield.numShield;
+            maxTempShield = currentTempShield;
+        } else
+        {
+            currentTempShield += newTempShield.numShield;
+        }
 
         playerStatsUI.tempShieldSlider.gameObject.SetActive(true);
         playerStatsUI.tempShieldSliderText.gameObject.SetActive(true);
         playerStatsUI.tempShieldImage.gameObject.SetActive(true);
 
         playerStatsUI.DisplayUpdatedTempShield(currentTempShield, maxTempShield);
-        Debug.Log($"Added {shield.GetDamageProtection()} temp shield to player for {shield.GetTurns()}");
+        Debug.Log($"Added {shield.GetDamageProtection()} temp shield to player for {shield.GetTurns()} turns");
         Debug.Log($"updated temp shields to have {currentTempShield} current and {maxTempShield} max");
         applyShieldOver = true;
     }
@@ -205,6 +224,7 @@ public class Player : MonoBehaviour
     public void AddPermShield(int amount)
     {
         maxPermShield += amount;
+        currentPermShield += amount;
         playerStatsUI.permShieldSlider.gameObject.SetActive(true);
         playerStatsUI.permShieldSliderText.gameObject.SetActive(true);
         playerStatsUI.permShieldImage.gameObject.SetActive(true);
@@ -214,6 +234,8 @@ public class Player : MonoBehaviour
 
     public void RegeneratePermShield()
     {
+        if (maxPermShield == 0) return;
+
         currentPermShield = maxPermShield;
         playerStatsUI.DisplayPermShield(currentPermShield);
         Debug.Log("perm shields regenerated");
