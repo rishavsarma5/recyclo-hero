@@ -3,9 +3,28 @@ using UnityEngine;
 [CreateAssetMenu]
 public class CET_Corrosion : CardElement
 {
-    public override void DoSideEffect()
+    public int decreaseSPAmount;
+    public override Target DoSideEffect()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("element corrosion side effect procked!!!");
+        if (!player || !enemy || !battleSceneManager) SetUnknownValues();
+
+        float value = Dice.NormalizedDiceRoll();
+        if (value <= successMax + relicBonus)
+        {
+            Debug.Log("Decrease SP side effect success!");
+            SE_SPDecrease spDecrease = ScriptableObject.CreateInstance<SE_SPDecrease>();
+            spDecrease.spDecrease = decreaseSPAmount;
+            spDecrease.SetTarget(enemy);
+            spDecrease.SetBattleSceneManager(battleSceneManager);
+            enemy.activeStatusEffects.Add(spDecrease);
+            return enemy;
+        }
+        else
+        {
+            Debug.Log("Decrease SP side effected not procked");
+            return null;
+        }
     }
 
     public override float ResistancePercentage()

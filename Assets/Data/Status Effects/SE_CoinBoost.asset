@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eed7922290cfd4438bb2e8e6f99e967e, type: 3}
-  m_Name: Water
+  m_Script: {fileID: 11500000, guid: 211152e80354c9f46bd18a0b57a0db44, type: 3}
+  m_Name: SE_CoinBoost
   m_EditorClassIdentifier: 
-  elementName: Water
-  description: Damage to light shield
-  color: {r: 0, g: 0.14357352, b: 1, a: 1}
-  relicBonus: 0
-  successMax: 0.8
-  player: {fileID: 0}
-  enemy: {fileID: 0}
+  type: CoinBoost
+  description: Adds a base amount of coins each active turn
+  turnDuration: 2
+  target: {fileID: 0}
+  phase: 0
+  battleSceneManager: {fileID: 0}
+  coinBonus: 2

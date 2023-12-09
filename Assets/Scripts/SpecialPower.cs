@@ -27,19 +27,19 @@ public class SpecialPower : MonoBehaviour
         enemyStatsUI.DisplayUpdatedSpecialPower(enemyCurrentLevel, enemyMaxLevel);
     }
 
-    public IEnumerator IncreasePlayerPowerLevel(int amount)
+    public IEnumerator IncreasePlayerPowerLevel(int amount, int statusEffectChange)
     {
-        if (playerCurrentLevel + amount >= playerMaxLevel)
+        if (playerCurrentLevel + amount + statusEffectChange >= playerMaxLevel)
         {
-            playerStatsUI.DisplaySpecialPower(playerCurrentLevel + amount);
+            playerStatsUI.DisplaySpecialPower(playerCurrentLevel + amount + statusEffectChange);
             StartCoroutine(battleSceneManager.DisplayPlayerSpecialAttackCards());
             yield return new WaitUntil(() => battleSceneManager.resetSpecialPowerLevel);
             battleSceneManager.resetSpecialPowerLevel = false;
             // wrap current Level back to 0 if it exceeds maxLevel
-            playerCurrentLevel = (playerCurrentLevel + amount) - playerMaxLevel;
+            playerCurrentLevel = (playerCurrentLevel + amount + statusEffectChange) - playerMaxLevel;
         } else
         {
-            playerCurrentLevel += amount;
+            playerCurrentLevel += amount + statusEffectChange;
         }
 
         // update player's UI
@@ -47,20 +47,22 @@ public class SpecialPower : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
     }
 
-    public void IncreaseEnemyPowerLevel(int amount)
+    public IEnumerator IncreaseEnemyPowerLevel(int amount, int statusEffectChange)
     {
-        if (enemyCurrentLevel + amount >= enemyMaxLevel)
+        if (enemyCurrentLevel + amount + statusEffectChange >= enemyMaxLevel)
         {
+            enemyStatsUI.DisplaySpecialPower(enemyCurrentLevel + amount + statusEffectChange);
             StartCoroutine(battleSceneManager.PerformEnemySpecialPower());
             // wrap current Level back to 0 if it exceeds maxLevel
-            enemyCurrentLevel = (enemyCurrentLevel + amount) - enemyMaxLevel;
+            enemyCurrentLevel = (enemyCurrentLevel + amount + statusEffectChange) - enemyMaxLevel;
         }
         else
         {
-            enemyCurrentLevel += amount;
+            enemyCurrentLevel += amount + statusEffectChange;
         }
 
         // update enemy's UI
         enemyStatsUI.DisplaySpecialPower(enemyCurrentLevel);
+        yield return new WaitForSeconds(0.5f);
     }
 }
