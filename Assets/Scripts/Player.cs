@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Target
 {
     public int currentHealth;
     public int maxHealth;
@@ -12,7 +12,8 @@ public class Player : MonoBehaviour
     public int maxPermShield;
     public List<TempShield> tempShields = new List<TempShield>();
     public bool applyShieldOver;
-
+    public int baseCoinsBonus;
+    public int relicCoinsBonus;
 
     Enemy enemy;
     BattleSceneManager battleSceneManager;

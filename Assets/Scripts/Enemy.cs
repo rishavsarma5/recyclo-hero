@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : Target
 {
     public List<EnemyAction> enemyActions;
     public List<EnemyAction> turns = new List<EnemyAction>();
@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
     public bool attackRollOver;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         battleSceneManager = FindObjectOfType<BattleSceneManager>();
         player = battleSceneManager.player;
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
         enemyStatsUI.DisplayHeavyArmor(maxHeavyArmor);
         //animator = GetComponent<Animator>();
         GenerateTurns();
-    }
+}
     public void GenerateTurns()
     {
         foreach (EnemyAction eA in enemyActions)

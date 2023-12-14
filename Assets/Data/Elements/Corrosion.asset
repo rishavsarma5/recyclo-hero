@@ -15,3 +15,8 @@ MonoBehaviour:
   elementName: Corrosion
   description: Damage directly to health
   color: {r: 0.24670324, g: 0, b: 0.3018868, a: 1}
+  relicBonus: 0
+  successMax: 0.8
+  player: {fileID: 0}
+  enemy: {fileID: 0}
+  decreaseSPAmount: 4

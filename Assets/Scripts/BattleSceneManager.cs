@@ -14,12 +14,18 @@ public class BattleSceneManager : MonoBehaviour
     public List<SpecialPowerOption> playerSpecialPowerCards = new List<SpecialPowerOption>();
     public List<SpecialPowerOption> enemySpecialPowerMoves = new List<SpecialPowerOption>();
     public List<SpecialPowerUI> playerSpecialPowerCardsDisplayed = new List<SpecialPowerUI>();
+    //public List<string> activeRelics = new List<string>(); // Change to relic list
+    //public List<string> deActiveRelics = new List<string>(); // Change to relic list
 
-
-    [Header("Stats")] public Enemy enemy;
+    [Header("Stats")] 
+    public Enemy enemy;
     public Player player;
     public int coins;
+    public int waterSECoinBonus;
+    public int relicCoinsBonus;
     public int powerBarIncrement;
+    public int playerStatusEffectSPChange;
+    public int enemyStatusEffectSPChange;
     public int drawAmount = 5;
     public List<CardUI> itemsBought = new List<CardUI>();
     public int maxWeaponsBought = 2;
@@ -34,15 +40,8 @@ public class BattleSceneManager : MonoBehaviour
 
     public Phase phase;
 
-    public enum Phase
-    {
-        Prep,
-        Buy,
-        SpecialPower,
-        Attack
-    };
-
-    [Header("UI")] public Button continueButton;
+    [Header("UI")] 
+    public Button continueButton;
     public TMP_Text coinText;
     public Image coinImage;
     public Button rollButton;
@@ -56,7 +55,8 @@ public class BattleSceneManager : MonoBehaviour
     //public Transform enemyParent;
     //public EndScreen endScreen;
 
-    [Header("Enemies")] public List<Enemy> enemies = new List<Enemy>();
+    [Header("Enemies")] 
+    public List<Enemy> enemies = new List<Enemy>();
     public GameObject[] possibleEnemies;
 
 
@@ -87,8 +87,9 @@ public class BattleSceneManager : MonoBehaviour
         enemy = FindObjectOfType<Enemy>();
         spBar = FindObjectOfType<SpecialPower>();
         //endScreen = FindObjectOfType<EndScreen>();
-        phase = Phase.Prep;
+        phase = Phase.PostTurnCleanup;
         numTurns = 1;
+        relicCoinsBonus = 0;
         rollEnemySpecialPower = false;
         specialPowerOptionChosen = false;
         resetSpecialPowerLevel = false;
@@ -103,13 +104,12 @@ public class BattleSceneManager : MonoBehaviour
 
     public IEnumerator BuyPhase()
     {
-        phase = Phase.Buy;
-        phaseText.text = "BUY PHASE";
+        print($"Buy phase current coin boost: {waterSECoinBonus}");
         allItemsBought = false;
         maxArmorBought = 1;
         maxWeaponsBought = 2;
         itemsBought.Clear();
-        coins = 0;
+        coins = relicCoinsBonus;
         coinsRolled = false;
         coinImage.gameObject.SetActive(true);
         coinText.gameObject.SetActive(true);
@@ -121,6 +121,12 @@ public class BattleSceneManager : MonoBehaviour
         currDiceSides = 6;
         continueButton.gameObject.SetActive(false);
         yield return new WaitUntil(() => coinsRolled);
+        Debug.Log($"coins is now: {coins}");
+        if (player.isCoinBoosted)
+        {
+            coins += waterSECoinBonus;
+            Debug.Log($"after boost, coins is now: {coins}");
+        }
         coinText.text = coins.ToString();
 
         foreach (CardUI cardUI in cardsDisplayed)
@@ -181,7 +187,7 @@ public class BattleSceneManager : MonoBehaviour
 
     public void ContinueToNextPhase()
     {
-        if (phase == Phase.Prep)
+        if (phase == Phase.ApplyRelics)
         {
             phase = Phase.Buy;
             phaseText.text = "BUY PHASE";
@@ -201,12 +207,15 @@ public class BattleSceneManager : MonoBehaviour
         }
         else if (phase == Phase.Attack)
         {
+            phase = Phase.PostTurnCleanup;
+            StartCoroutine(PostTurnCleanupPhase());
+        } 
+        else if (phase == Phase.PostTurnCleanup)
+        {
+            //phase = Phase.ApplyRelics;
+            //StartCoroutine(ApplyRelics()); // use this and above line instead
             phase = Phase.Buy;
             phaseText.text = "BUY PHASE";
-            player.UpdateCurrentTempShieldTurns();
-            player.RegeneratePermShield();
-            turnText.gameObject.SetActive(false);
-            turnImage.gameObject.SetActive(false);
             StartCoroutine(BuyPhase());
         }
     }
@@ -219,26 +228,34 @@ public class BattleSceneManager : MonoBehaviour
         continueButton.gameObject.SetActive(true);
         //banner.Play("bannerIn");
 
-        if (itemsBought.Count == 0)
+        if (!player.isStunned) 
         {
-            rollButtonText.gameObject.SetActive(true);
-            rollButtonText.text = "No weapons bought. Press Continue to go to enemy attack.";
+            if (itemsBought.Count == 0)
+            {
+                rollButtonText.gameObject.SetActive(true);
+                rollButtonText.text = "No weapons bought. Press Continue to go to enemy attack.";
+            }
+            else
+            {
+                foreach (CardUI item in itemsBought)
+                {
+                    Debug.Log($"Using item {item}...");
+                    item.gameObject.SetActive(true);
+                    StartCoroutine(cardActions.PerformAction(item.card, enemy));
+                    //item.gameObject.SetActive(false);
+                    yield return new WaitUntil(() => cardActions.cardActionOver);
+                    item.gameObject.SetActive(false);
+                }
+                cardActionButton.gameObject.SetActive(false);
+                cardActionButtonText.gameObject.SetActive(false);
+                yield return new WaitUntil(() => playerAttackOver);
+                playerAttackOver = false;
+            }
         } else
         {
-            foreach (CardUI item in itemsBought)
-            {
-                Debug.Log($"Using item {item}...");
-                item.gameObject.SetActive(true);
-                StartCoroutine(cardActions.PerformAction(item.card, enemy));
-                //item.gameObject.SetActive(false);
-                yield return new WaitUntil(() => cardActions.cardActionOver);
-                item.gameObject.SetActive(false);
-            }
-            cardActionButton.gameObject.SetActive(false);
-            cardActionButtonText.gameObject.SetActive(false);
-            yield return new WaitUntil(() => playerAttackOver);
-            playerAttackOver = false;
+            Debug.Log("Player is stunned. Skipping Player's Attack Phase.");
         }
+
         continueButton.gameObject.SetActive(false);
         StartCoroutine(EnemyAttack());
     }
@@ -256,11 +273,19 @@ public class BattleSceneManager : MonoBehaviour
             yield return new WaitUntil(() => enemy.enemyTurnOver);
         }
         */
-        enemy.enemyTurnOver = false;
-        StartCoroutine(enemy.AttackPlayer());
-        yield return new WaitUntil(() => enemy.enemyTurnOver);
-        rollButtonText.gameObject.SetActive(false);
-        enemy.enemyTurnOver = false;
+        Debug.Log($"enemy stun status: {enemy.isStunned}");
+        if (!enemy.isStunned)
+        {
+            enemy.enemyTurnOver = false;
+            StartCoroutine(enemy.AttackPlayer());
+            yield return new WaitUntil(() => enemy.enemyTurnOver);
+            rollButtonText.gameObject.SetActive(false);
+            enemy.enemyTurnOver = false;
+        }
+        else
+        {
+            Debug.Log("Enemy is stunned. Skipping Enemy's Attack Phase.");
+        }
         yield return new WaitForSeconds(1.5f);
         ContinueToNextPhase();
     }
@@ -268,6 +293,7 @@ public class BattleSceneManager : MonoBehaviour
     public IEnumerator SpecialPowerPhase()
     {
         turnText.text = "Player's Turn";
+
         rollButton.gameObject.SetActive(true);
         rollButtonText.gameObject.SetActive(true);
         rollButtonText.text = "Roll d6 to increase special power bar:";
@@ -279,7 +305,8 @@ public class BattleSceneManager : MonoBehaviour
         rollButtonText.gameObject.SetActive(false);
         specialPowerRolled = false;
         specialPowerOptionChosen = false;
-        StartCoroutine(spBar.IncreasePlayerPowerLevel(powerBarIncrement));
+
+        StartCoroutine(spBar.IncreasePlayerPowerLevel(powerBarIncrement, playerStatusEffectSPChange));
 
         continueButton.gameObject.SetActive(true);
         yield return new WaitUntil(() => rollEnemySpecialPower);
@@ -289,7 +316,7 @@ public class BattleSceneManager : MonoBehaviour
 
         int value = Dice.DiceRoll(currDiceSides);
         Debug.Log($"Enemy increased power bar by {value}");
-        spBar.IncreaseEnemyPowerLevel(value);
+        StartCoroutine(spBar.IncreaseEnemyPowerLevel(value, enemyStatusEffectSPChange));
         yield return new WaitForSeconds(0.5f);
         ContinueToNextPhase();
 
@@ -316,6 +343,41 @@ public class BattleSceneManager : MonoBehaviour
         enemySpecialPowerMoves.Shuffle();
         enemySpecialPowerMoves[0].PerformAction();
         yield return new WaitForSeconds(0.5f);
+    }
+
+    public IEnumerator PostTurnCleanupPhase()
+    {
+        player.UpdateCurrentTempShieldTurns();
+        player.RegeneratePermShield();
+        
+        foreach(StatusEffect statusEffect in player.activeStatusEffects)
+        {
+            statusEffect.DecreaseTurn();
+        }
+
+        foreach (StatusEffect statusEffect in enemy.activeStatusEffects)
+        {
+            statusEffect.DecreaseTurn();
+        }
+
+        turnText.gameObject.SetActive(false);
+        turnImage.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+        ContinueToNextPhase();
+    }
+
+    public IEnumerator ApplyRelics()
+    {
+        // apply and update relics
+        /*
+        foreach (Relic relic in activeRelics)
+        {
+            relic.ApplyEffect();
+            relic.Update();
+        }
+        */
+        yield return new WaitForSeconds(0.5f);
+        ContinueToNextPhase();
     }
 
     public void ContinueButton()
@@ -385,3 +447,12 @@ public class BattleSceneManager : MonoBehaviour
     }
     */
 }
+
+public enum Phase
+{
+    ApplyRelics,
+    Buy,
+    SpecialPower,
+    Attack,
+    PostTurnCleanup,
+};

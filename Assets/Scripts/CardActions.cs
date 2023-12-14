@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class CardActions : MonoBehaviour
 {
@@ -12,11 +13,13 @@ public class CardActions : MonoBehaviour
     public int totalDamage;
     public bool isWeapon;
     public bool cardActionOver;
+    public Target seSuccessTarget;
 
 
     private void Awake()
     {
         battleSceneManager = FindObjectOfType<BattleSceneManager>();
+        seSuccessTarget = null;
     }
     public IEnumerator PerformAction(Card card, Enemy enemy)
     {
@@ -32,6 +35,11 @@ public class CardActions : MonoBehaviour
                 enemy.attackRollOver = false;
                 StartCoroutine(ElementalAttack(weapon, enemy));
                 yield return new WaitUntil(() => enemy.attackRollOver);
+                seSuccessTarget = card.GetCardElement().DoSideEffect();
+                if (seSuccessTarget)
+                {
+                    StartCoroutine(seSuccessTarget.activeStatusEffects[^1].EvaluateEffect());
+                }
                 break;
             case CT_Shield shield:
                 player.applyShieldOver = false;
@@ -39,6 +47,8 @@ public class CardActions : MonoBehaviour
                 yield return new WaitUntil(() => player.applyShieldOver);
                 break;
         }
+
+
 
         cardActionOver = true;
         battleSceneManager.cardActionButton.gameObject.SetActive(true);
