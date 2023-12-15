@@ -101,8 +101,9 @@ public class BattleSceneManager : MonoBehaviour
 
     public void StartFight()
     {
-        player.gameObject.SetActive(true);
-        enemy.gameObject.SetActive(true);
+        player.gameObject.SetActive(false);
+        enemy.gameObject.SetActive(false);
+        continueButton.gameObject.SetActive(false);
         StartCoroutine(ChooseStartingRelic());
     }
 
@@ -119,6 +120,9 @@ public class BattleSceneManager : MonoBehaviour
 
         yield return new WaitUntil(() => startingRelicChosen);
         startingRelicChosen = false;
+        player.gameObject.SetActive(true);
+        enemy.gameObject.SetActive(true);
+        continueButton.gameObject.SetActive(true);
         ContinueToNextPhase();
     }
 
@@ -130,6 +134,7 @@ public class BattleSceneManager : MonoBehaviour
         }
 
         print($"Buy phase current coin boost: {waterSECoinBonus}");
+        Debug.Log($"player coin boost status: {player.isCoinBoosted}");
         allItemsBought = false;
         maxArmorBought = 1;
         maxWeaponsBought = 2 + relicMaxWeaponsBonus;
