@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Eelio
   enemyDescription: Lives in the depths of the ocean.
-  enemyImage: {fileID: 21300000, guid: 825ed0c1f78504422a3966b46e29e5c6, type: 3}
+  enemyImage: {fileID: 21300000, guid: 2ca680ee7cd4c427b85e621050a31967, type: 3}
   health: 40
-  lightArmor: 10
+  lightShield: 10
   heavyArmor: 6
   enragedMultiplier: 1
   staggeredTurns: 2
