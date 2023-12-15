@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SceneManager : MonoBehaviour
+public class GameSceneManager : MonoBehaviour
 {
     public GameObject titleScene;
     public GameObject battleScene;
@@ -26,6 +27,12 @@ public class SceneManager : MonoBehaviour
         titleScene.SetActive(false);
         battleScene.SetActive(true);
         battleSceneManager.StartFight();
+    }
+
+    public void NextBattle()
+    {
+        Scene scene = SceneManager.GetActiveScene(); 
+        SceneManager.LoadScene(scene.name); 
     }
 
     /*

@@ -48,7 +48,7 @@ public class Enemy : Target
         battleSceneManager = FindObjectOfType<BattleSceneManager>();
         player = battleSceneManager.player;
         enemyStatsUI = FindObjectOfType<EnemyStatsUI>();
-        
+
         //animator = GetComponent<Animator>();
     }
 
@@ -56,7 +56,7 @@ public class Enemy : Target
     {
         // Pick Enemy
         currentEnemy = enemies[Random.Range(0, enemies.Count)];
-        
+
         // Set enemy HP Stats
         maxHealth.CurrentValue = currentEnemy.health;
         currentHealth.CurrentValue = currentEnemy.health;
@@ -293,6 +293,7 @@ public class Enemy : Target
                 currentHeavyArmor.CurrentValue + lightShieldHealAmount);
             enemyStatsUI.DisplayHeavyArmor(currentHeavyArmor.CurrentValue);
         }
+
         Debug.Log("Enemy Healed.");
     }
 

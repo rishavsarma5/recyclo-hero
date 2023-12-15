@@ -15,6 +15,6 @@ MonoBehaviour:
   actionName: Decay Ray
   actionDescription: Wilts anything it hits.
   actionElement: {fileID: 11400000, guid: 59aee632b7f3148d4bc508e841766413, type: 2}
-  diceSides: 2
+  diceSides: 4
   numAttacks: 1
-  baseDamage: 6
+  baseDamage: 2

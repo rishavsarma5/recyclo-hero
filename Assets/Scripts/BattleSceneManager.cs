@@ -63,7 +63,8 @@ public class BattleSceneManager : MonoBehaviour
     public Animator banner;
     public TMP_Text turnText;
     public Image turnImage;
-    public GameObject gameover;
+    public GameObject gameOver;
+    public GameObject youWin;
     public int currDiceSides;
     public bool allItemsBought;
     public bool playerAttackOver;
@@ -100,7 +101,7 @@ public class BattleSceneManager : MonoBehaviour
 
     public IEnumerator BuyPhase()
     {
-        if (enemy.currentHealth.CurrentValue <= 0)
+        if (enemy.currentEnemy == null)
         {
             enemy.SetupEnemy();
         }
@@ -437,7 +438,11 @@ public class BattleSceneManager : MonoBehaviour
     public void EndFight(bool win)
     {
         if (!win)
-            gameover.SetActive(true);
+            gameOver.SetActive(true);
+        else
+        {
+            youWin.SetActive(true);
+        }
     }
 
     /*
