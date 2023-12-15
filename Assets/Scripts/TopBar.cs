@@ -26,6 +26,7 @@ public class TopBar : MonoBehaviour
         relicItemInfo.relicImage = relic.relicImage;
         relicItemInfo.relicDescription = relic.relicDescription;
         topBarRelics[relic.relicDescription] = newRelic;
+        newRelic.GetComponent<Image>().sprite = relic.relicImage;
         DisplayRelics();
     }
 
