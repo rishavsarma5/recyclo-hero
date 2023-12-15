@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36c35a473d26e4e3ea8bd2bb57c110b0, type: 3}
+  m_Name: Pestilence Wraith
+  m_EditorClassIdentifier: 
+  enemyName: Pestilence Wraith
+  enemyDescription: Spreads disease and decay to corrode things in its path.
+  enemyImage: {fileID: 21300000, guid: 044f07b2da83e4e0a87c80a4fe13e16c, type: 3}
+  bossMusic: {fileID: 8300000, guid: 8e1c595df304a4baea48516a953d198b, type: 3}
+  health: 30
+  lightShield: 20
+  heavyArmor: 15
+  enragedMultiplier: 1.5
+  staggeredTurns: 2
+  enemyActions:
+  - {fileID: 11400000, guid: 0272f935fbe454c88873bab037e48bc7, type: 2}
+  - {fileID: 11400000, guid: ebf2c0b4a5ffa4aaf9999811ad65b7de, type: 2}
+  - {fileID: 11400000, guid: 590f7474a61244e8c9c68db3404b6fc8, type: 2}
+  enemySpecialActions:
+  - {fileID: 11400000, guid: 19b4cf35b4a430a4692b6cc1f55911bf, type: 2}
+  enemyAI:
+    conditions:
+    - currentValue: {fileID: 11400000, guid: 078506ca5d223410c92b2d0fcbad93be, type: 2}
+      maxValue: {fileID: 11400000, guid: 158e11de43dc9412ead92e6336f2165b, type: 2}
+      comparator: 1
+      comparisonPercentage: 0.75
+      EnemyActionChoices:
+      - enemyAction: {fileID: 11400000, guid: ebf2c0b4a5ffa4aaf9999811ad65b7de, type: 2}
+        weight: 45
+      - enemyAction: {fileID: 11400000, guid: 0272f935fbe454c88873bab037e48bc7, type: 2}
+        weight: 50
+      - enemyAction: {fileID: 11400000, guid: 590f7474a61244e8c9c68db3404b6fc8, type: 2}
+        weight: 5
+    - currentValue: {fileID: 11400000, guid: 078506ca5d223410c92b2d0fcbad93be, type: 2}
+      maxValue: {fileID: 11400000, guid: 158e11de43dc9412ead92e6336f2165b, type: 2}
+      comparator: 4
+      comparisonPercentage: 0.25
+      EnemyActionChoices:
+      - enemyAction: {fileID: 11400000, guid: 0272f935fbe454c88873bab037e48bc7, type: 2}
+        weight: 10
+      - enemyAction: {fileID: 11400000, guid: 590f7474a61244e8c9c68db3404b6fc8, type: 2}
+        weight: 90
+    - currentValue: {fileID: 11400000, guid: 078506ca5d223410c92b2d0fcbad93be, type: 2}
+      maxValue: {fileID: 11400000, guid: 158e11de43dc9412ead92e6336f2165b, type: 2}
+      comparator: 4
+      comparisonPercentage: 0.75
+      EnemyActionChoices:
+      - enemyAction: {fileID: 11400000, guid: 0272f935fbe454c88873bab037e48bc7, type: 2}
+        weight: 30
+      - enemyAction: {fileID: 11400000, guid: ebf2c0b4a5ffa4aaf9999811ad65b7de, type: 2}
+        weight: 35
+      - enemyAction: {fileID: 11400000, guid: 590f7474a61244e8c9c68db3404b6fc8, type: 2}
+        weight: 35
+    enragedActions: []
+    enraged: {fileID: 11400000, guid: 0e1f8f177012d4c379cc60babb04a239, type: 2}
+    defaultEnemyAction: {fileID: 11400000, guid: ebf2c0b4a5ffa4aaf9999811ad65b7de, type: 2}
