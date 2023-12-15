@@ -13,6 +13,16 @@ public class Enemy : Target
     public GlobalInt currentHeavyArmor;
     public GlobalInt maxHeavyArmor;
 
+    public GlobalBool enraged;
+    public GlobalBool staggered;
+    public int staggeredTurnCount = -1;
+
+    public int lightShieldHealAmount = 2;
+
+    [Range(0.0f, 1.0f)] public float heavyArmorDamageMultiplier = 0.8f;
+    public int standardSpecialBarIncrease = 5;
+    public int noHeavyArmorSpecialBarIncrease = 7;
+
     BattleSceneManager battleSceneManager;
     EnemyStatsUI enemyStatsUI;
 
@@ -57,6 +67,7 @@ public class Enemy : Target
         {
             yield return new WaitForSeconds(0.5f);
             int totalDamage = Dice.DiceRoll(ea.diceSides) + ea.baseDamage;
+            totalDamage = (int)(enraged.CurrentValue ? totalDamage * currentEnemy.enragedMultiplier : totalDamage);
             battleSceneManager.rollButtonText.gameObject.SetActive(true);
             battleSceneManager.rollButtonText.text = "";
             battleSceneManager.rollButtonText.text = $"Enemy did {totalDamage} to player.";
@@ -84,6 +95,11 @@ public class Enemy : Target
 
     public void TakeNormalDamage(int amount)
     {
+        if (currentHeavyArmor.CurrentValue > 0)
+        {
+            amount = (int)(amount * heavyArmorDamageMultiplier);
+        }
+
         Debug.Log($"Enemy took {amount} normal damage");
 
         amount = TakeHeavyArmorDamage(amount);
@@ -103,7 +119,7 @@ public class Enemy : Target
     {
         if (currentHeavyArmor.CurrentValue > 0)
         {
-            if (currentHeavyArmor.CurrentValue >= amount)
+            if (currentHeavyArmor.CurrentValue > amount)
             {
                 //block all
                 Debug.Log($"heavy armor blocks all {amount} damage");
@@ -116,6 +132,8 @@ public class Enemy : Target
                 Debug.Log($"heavy armor blocks {currentHeavyArmor} damage");
                 amount -= currentHeavyArmor.CurrentValue;
                 currentHeavyArmor.CurrentValue = 0;
+                staggered.CurrentValue = true;
+                staggeredTurnCount = currentEnemy.staggeredTurns;
             }
 
             enemyStatsUI.DisplayHeavyArmor(currentHeavyArmor.CurrentValue);
@@ -128,7 +146,7 @@ public class Enemy : Target
     {
         if (amount > 0 && currentLightShield.CurrentValue > 0)
         {
-            if (currentLightShield.CurrentValue >= amount)
+            if (currentLightShield.CurrentValue > amount)
             {
                 //block all
                 Debug.Log($"light shield blocks rest {amount} damage");
@@ -141,6 +159,7 @@ public class Enemy : Target
                 Debug.Log($"light shield blocks additional {currentLightShield} damage");
                 amount -= currentLightShield.CurrentValue;
                 currentLightShield.CurrentValue = 0;
+                enraged.CurrentValue = true;
             }
 
             enemyStatsUI.DisplayLightShield(currentLightShield.CurrentValue);
@@ -216,5 +235,41 @@ public class Enemy : Target
     private void FinishAttackRoll()
     {
         attackRollOver = true;
+    }
+
+    public void ReduceEnemyStaggered()
+    {
+        if (!staggered.CurrentValue) return;
+
+        staggeredTurnCount--;
+        if (staggeredTurnCount <= 0)
+        {
+            staggered.CurrentValue = false;
+        }
+    }
+
+    public void LightShieldHeal()
+    {
+        if (currentLightShield.CurrentValue <= 0) return;
+
+        if (currentHealth.CurrentValue < maxHealth.CurrentValue)
+        {
+            currentHealth.CurrentValue = Mathf.Min(maxHealth.CurrentValue,
+                currentHealth.CurrentValue + lightShieldHealAmount);
+            enemyStatsUI.DisplayHealth(currentHealth.CurrentValue);
+        }
+        else if (currentLightShield.CurrentValue < maxLightShield.CurrentValue)
+        {
+            currentLightShield.CurrentValue = Mathf.Min(maxLightShield.CurrentValue,
+                currentLightShield.CurrentValue + lightShieldHealAmount);
+            enemyStatsUI.DisplayLightShield(currentLightShield.CurrentValue);
+        }
+        else if (currentHeavyArmor.CurrentValue < maxHeavyArmor.CurrentValue)
+        {
+            currentHeavyArmor.CurrentValue = Mathf.Min(maxHeavyArmor.CurrentValue,
+                currentHeavyArmor.CurrentValue + lightShieldHealAmount);
+            enemyStatsUI.DisplayHeavyArmor(currentHeavyArmor.CurrentValue);
+        }
+        Debug.Log("Enemy Healed.");
     }
 }

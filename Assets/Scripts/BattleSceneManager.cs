@@ -274,8 +274,12 @@ public class BattleSceneManager : MonoBehaviour
             yield return new WaitUntil(() => enemy.enemyTurnOver);
         }
         */
-        Debug.Log($"enemy stun status: {enemy.isStunned}");
-        if (!enemy.isStunned)
+        Debug.Log($"enemy stun/stagger status: {enemy.isStunned || enemy.staggered.CurrentValue}");
+        if (enemy.isStunned)
+        {
+            enemy.enraged.CurrentValue = false;
+        }
+        if (!enemy.isStunned && !enemy.staggered.CurrentValue)
         {
             enemy.enemyTurnOver = false;
             StartCoroutine(enemy.AttackPlayer());
@@ -287,6 +291,9 @@ public class BattleSceneManager : MonoBehaviour
         {
             Debug.Log("Enemy is stunned. Skipping Enemy's Attack Phase.");
         }
+        
+        enemy.ReduceEnemyStaggered();
+        enemy.LightShieldHeal();
 
         yield return new WaitForSeconds(1.5f);
         ContinueToNextPhase();
@@ -314,7 +321,9 @@ public class BattleSceneManager : MonoBehaviour
         yield return new WaitUntil(() => rollEnemySpecialPower);
         rollEnemySpecialPower = false;
         turnText.text = "Enemy's Turn";
-        currDiceSides = 6;
+        currDiceSides = enemy.currentHeavyArmor.CurrentValue <= 0
+            ? enemy.noHeavyArmorSpecialBarIncrease
+            : enemy.standardSpecialBarIncrease;
 
         int value = Dice.DiceRoll(currDiceSides);
         Debug.Log($"Enemy increased power bar by {value}");
