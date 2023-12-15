@@ -14,6 +14,8 @@ public class Player : Target
     public int baseCoinsBonus;
     public int relicCoinsBonus;
 
+    public List<Relic> playerRelics = new List<Relic>();
+
     Enemy enemy;
     BattleSceneManager battleSceneManager;
 
@@ -230,6 +232,22 @@ public class Player : Target
         playerStatsUI.permShieldImage.gameObject.SetActive(true);
         playerStatsUI.DisplayUpdatedPermShield(currentPermShield, maxPermShield);
         Debug.Log($"perm shield increased to {maxPermShield}");
+    }
+
+    public void RemovePermShield(int amount)
+    {
+        maxPermShield -= amount;
+        currentPermShield -= amount;
+        if (maxPermShield == 0)
+        {
+            playerStatsUI.permShieldSlider.gameObject.SetActive(false);
+            playerStatsUI.permShieldSliderText.gameObject.SetActive(false);
+            playerStatsUI.permShieldImage.gameObject.SetActive(false);
+        } else
+        {
+            playerStatsUI.DisplayUpdatedPermShield(currentPermShield, maxPermShield);
+        }
+        Debug.Log($"perm shield decreased to {maxPermShield}");
     }
 
     public void RegeneratePermShield()
