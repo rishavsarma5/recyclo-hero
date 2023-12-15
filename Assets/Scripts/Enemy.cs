@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Enemy : Target
 {
-    public EnemyUnit currentEnemy;
+    public List<EnemyUnit> enemies = new();
+    public EnemyUnit currentEnemy { get; private set; }
     private EnemyAction currentAttack;
     public int turnNumber = 0;
     public GlobalInt currentHealth;
@@ -35,9 +37,26 @@ public class Enemy : Target
     public bool enemyTurnOver;
     public bool attackRollOver;
 
+    public Enemy(EnemyUnit currentEnemy)
+    {
+        this.currentEnemy = currentEnemy;
+    }
+
     // Start is called before the first frame update
     void Awake()
     {
+        battleSceneManager = FindObjectOfType<BattleSceneManager>();
+        player = battleSceneManager.player;
+        enemyStatsUI = FindObjectOfType<EnemyStatsUI>();
+        
+        //animator = GetComponent<Animator>();
+    }
+
+    public void SetupEnemy()
+    {
+        // Pick Enemy
+        currentEnemy = enemies[Random.Range(0, enemies.Count)];
+        
         // Set enemy HP Stats
         maxHealth.CurrentValue = currentEnemy.health;
         currentHealth.CurrentValue = currentEnemy.health;
@@ -47,10 +66,6 @@ public class Enemy : Target
 
         maxHeavyArmor.CurrentValue = currentEnemy.heavyArmor;
         currentHeavyArmor.CurrentValue = currentEnemy.heavyArmor;
-
-        battleSceneManager = FindObjectOfType<BattleSceneManager>();
-        player = battleSceneManager.player;
-        enemyStatsUI = FindObjectOfType<EnemyStatsUI>();
         enemyStatsUI.healthSlider.maxValue = maxHealth.CurrentValue;
         enemyStatsUI.lightShieldSlider.maxValue = maxLightShield.CurrentValue;
         enemyStatsUI.heavyArmorSlider.maxValue = maxHeavyArmor.CurrentValue;
@@ -63,7 +78,6 @@ public class Enemy : Target
         audioSource.clip = currentEnemy.bossMusic;
         audioSource.Play();
         RemoveAttack();
-        //animator = GetComponent<Animator>();
     }
 
     public IEnumerator AttackPlayer()

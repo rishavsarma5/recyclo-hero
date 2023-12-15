@@ -2660,7 +2660,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7819c95792a064c80bcb4a4032699255, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.15
   m_Pitch: 1
@@ -6396,7 +6396,9 @@ MonoBehaviour:
   isSPBoosted: 0
   isStunned: 0
   isSPNerfed: 0
-  currentEnemy: {fileID: 11400000, guid: b8ffa2c88028e4f158ee9ccfac804017, type: 2}
+  enemies:
+  - {fileID: 11400000, guid: 87aede363a14845b9ab6a4cc0844eca4, type: 2}
+  - {fileID: 11400000, guid: b8ffa2c88028e4f158ee9ccfac804017, type: 2}
   turnNumber: 0
   currentHealth: {fileID: 11400000, guid: 078506ca5d223410c92b2d0fcbad93be, type: 2}
   maxHealth: {fileID: 11400000, guid: 158e11de43dc9412ead92e6336f2165b, type: 2}

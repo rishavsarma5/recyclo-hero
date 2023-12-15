@@ -100,6 +100,11 @@ public class BattleSceneManager : MonoBehaviour
 
     public IEnumerator BuyPhase()
     {
+        if (enemy.currentHealth.CurrentValue <= 0)
+        {
+            enemy.SetupEnemy();
+        }
+
         print($"Buy phase current coin boost: {waterSECoinBonus}");
         allItemsBought = false;
         maxArmorBought = 1;
