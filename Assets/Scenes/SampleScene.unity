@@ -6128,11 +6128,11 @@ MonoBehaviour:
   currentLightShield: {fileID: 11400000, guid: c7c7ce83794d14e4fb4d5ec1feb3868c, type: 2}
   maxLightShield: {fileID: 11400000, guid: b8bf949fb205a4787b2365c0ec84bdaf, type: 2}
   currentHeavyArmor: {fileID: 11400000, guid: 25c908c787fbc404e885b94b2a45212e, type: 2}
-  maxHeavyArmor: {fileID: 11400000, guid: 25c908c787fbc404e885b94b2a45212e, type: 2}
+  maxHeavyArmor: {fileID: 11400000, guid: 7c323254f3d9b48a5be9049c15e70b75, type: 2}
   enraged: {fileID: 11400000, guid: 0e1f8f177012d4c379cc60babb04a239, type: 2}
-  enragedTurnCount: -1
   staggered: {fileID: 11400000, guid: 4bff1d61c616f487fa7b42f11355293c, type: 2}
   staggeredTurnCount: -1
+  lightShieldHealAmount: 2
   heavyArmorDamageMultiplier: 0.8
   standardSpecialBarIncrease: 5
   noHeavyArmorSpecialBarIncrease: 7
