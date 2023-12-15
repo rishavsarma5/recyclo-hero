@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : Target
 {
     public EnemyUnit currentEnemy;
+    private EnemyAction currentAttack;
     public int turnNumber = 0;
     public GlobalInt currentHealth;
     public GlobalInt maxHealth;
@@ -54,6 +55,8 @@ public class Enemy : Target
         enemyStatsUI.DisplayHealth(maxHealth.CurrentValue);
         enemyStatsUI.DisplayLightShield(maxLightShield.CurrentValue);
         enemyStatsUI.DisplayHeavyArmor(maxHeavyArmor.CurrentValue);
+        enemyStatsUI.enemyName.text = currentEnemy.enemyName;
+        RemoveAttack();
         //animator = GetComponent<Animator>();
     }
 
@@ -61,7 +64,7 @@ public class Enemy : Target
     {
         battleSceneManager.numTurns++;
         //animator.Play("Attack");
-        EnemyAction ea = currentEnemy.NextEnemyAction();
+        EnemyAction ea = currentAttack;
 
         for (int i = 0; i < ea.numAttacks; i++)
         {
@@ -271,5 +274,17 @@ public class Enemy : Target
             enemyStatsUI.DisplayHeavyArmor(currentHeavyArmor.CurrentValue);
         }
         Debug.Log("Enemy Healed.");
+    }
+
+    public void RemoveAttack()
+    {
+        enemyStatsUI.enemyAttack.text = "";
+        currentAttack = null;
+    }
+
+    public void GenerateAttack()
+    {
+        currentAttack = currentEnemy.NextEnemyAction();
+        enemyStatsUI.enemyAttack.text = "Next Attack: " + currentAttack.actionName;
     }
 }

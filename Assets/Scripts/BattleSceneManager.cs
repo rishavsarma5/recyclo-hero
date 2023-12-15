@@ -153,6 +153,8 @@ public class BattleSceneManager : MonoBehaviour
 
         gameManager.inventory.Shuffle();
         DrawCards(drawAmount);
+        
+        enemy.GenerateAttack();
         yield return new WaitUntil(() => allItemsBought);
         rollButtonText.gameObject.SetActive(false);
         coinImage.gameObject.SetActive(false);
@@ -295,6 +297,7 @@ public class BattleSceneManager : MonoBehaviour
 
         enemy.ReduceEnemyStaggered();
         enemy.LightShieldHeal();
+        enemy.RemoveAttack();
 
         yield return new WaitForSeconds(1.5f);
         ContinueToNextPhase();
