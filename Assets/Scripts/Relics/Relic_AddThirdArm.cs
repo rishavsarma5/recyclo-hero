@@ -8,14 +8,19 @@ public class Relic_AddThirdArm : Relic
     [Header("Relic Specific Values")]
     public int maxWeaponBonus;
 
-    public override void AddEffect()
+    public override void AddRelicEffect(BattleSceneManager bsm, Player p)
     {
-        battleSceneManager.maxWeaponsBought += maxWeaponBonus;
+        battleSceneManager = bsm;
+        topBar = battleSceneManager.topBar;
+        player = p;
+        player.playerRelics.Add(this);
+        battleSceneManager.relicMaxWeaponsBonus = maxWeaponBonus;
     }
 
     public override void RemoveRelicFromPlayer()
     {
-        battleSceneManager.maxWeaponsBought -= maxWeaponBonus;
-        //player.playerRelics.Remove(this);
+        battleSceneManager.relicMaxWeaponsBonus = 0;
+        topBar.RemoveRelicItem(this);
+        player.playerRelics.Remove(this);
     }
 }

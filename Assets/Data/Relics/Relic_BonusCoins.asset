@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relicName: Bonus Coins
   relicDescription: Start Each Buy Phase with added coins.
-  relicImage: {fileID: 0}
+  relicImage: {fileID: 21300000, guid: 217bfa99d5fe34948bc4d533192ff7fa, type: 3}
   turnDuration: 0
   isPermanent: 1
   battleSceneManager: {fileID: 0}
   player: {fileID: 0}
+  topBar: {fileID: 0}
   coinBonus: 2
   relicBuffBonus: 0

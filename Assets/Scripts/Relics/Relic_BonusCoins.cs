@@ -9,14 +9,19 @@ public class Relic_BonusCoins : Relic
     public int coinBonus;
     public int relicBuffBonus;
 
-    public override void AddEffect()
+    public override void AddRelicEffect(BattleSceneManager bsm, Player p)
     {
+        battleSceneManager = bsm;
+        topBar = battleSceneManager.topBar;
+        player = p;
+        player.playerRelics.Add(this);
         battleSceneManager.relicCoinsBonus = coinBonus + relicBuffBonus;
     }
 
     public override void RemoveRelicFromPlayer()
     {
         battleSceneManager.relicCoinsBonus = 0;
-        //player.playerRelics.Remove(this);
+        topBar.RemoveRelicItem(this);
+        player.playerRelics.Remove(this);
     }
 }

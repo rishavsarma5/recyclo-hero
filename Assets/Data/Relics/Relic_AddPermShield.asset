@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relicName: Add Perm Shield
   relicDescription: Player has base 2 perm shield.
-  relicImage: {fileID: 0}
+  relicImage: {fileID: 21300000, guid: da7f2e692d43ddd45b4ac29056d809df, type: 3}
   turnDuration: 0
   isPermanent: 1
   battleSceneManager: {fileID: 0}
   player: {fileID: 0}
+  topBar: {fileID: 0}
   permShieldAmount: 2

@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class Relic : ScriptableObject
 {
-    [Header("Description")][Tooltip("Name")]
+    [Header("Description")]
     public string relicName;
-
     public string relicDescription;
 
     [Header("Visuals")] 
@@ -18,11 +18,7 @@ public abstract class Relic : ScriptableObject
     public bool isPermanent;
     public BattleSceneManager battleSceneManager;
     public Player player;
-
-    public void SetBattleSceneManager(BattleSceneManager bsm)
-    {
-        battleSceneManager = bsm;
-    }
+    public TopBar topBar;
 
     public void DecreaseRelicTurnDuration()
     {
@@ -39,5 +35,5 @@ public abstract class Relic : ScriptableObject
 
     public abstract void RemoveRelicFromPlayer();
 
-    public abstract void AddEffect();
+    public abstract void AddRelicEffect(BattleSceneManager bsm, Player p);
 }
