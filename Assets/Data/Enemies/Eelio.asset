@@ -15,6 +15,7 @@ MonoBehaviour:
   enemyName: Eelio
   enemyDescription: Lives in the depths of the ocean.
   enemyImage: {fileID: 21300000, guid: 2ca680ee7cd4c427b85e621050a31967, type: 3}
+  enemyBackground: {fileID: 21300000, guid: ae13c83ff285a4971807990068911aaa, type: 3}
   bossMusic: {fileID: 8300000, guid: 7819c95792a064c80bcb4a4032699255, type: 3}
   health: 40
   lightShield: 10

@@ -15,6 +15,7 @@ public class EnemyStatsUI : MonoBehaviour
     public TMP_Text enemyName;
     public TMP_Text enemyAttack;
     public Image enemyImage;
+    public Image enemyBackground;
 
     public void DisplayHealth(int healthAmount)
     {

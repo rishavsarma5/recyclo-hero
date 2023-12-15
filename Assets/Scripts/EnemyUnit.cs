@@ -11,6 +11,7 @@ public class EnemyUnit : ScriptableObject
     public string enemyDescription;
 
     [Header("Visuals")] public Sprite enemyImage;
+    public Sprite enemyBackground;
 
     [Header("Audio")] public AudioClip bossMusic;
 

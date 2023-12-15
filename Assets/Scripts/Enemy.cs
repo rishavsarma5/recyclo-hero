@@ -74,6 +74,7 @@ public class Enemy : Target
         enemyStatsUI.DisplayHeavyArmor(maxHeavyArmor.CurrentValue);
         enemyStatsUI.enemyName.text = currentEnemy.enemyName;
         enemyStatsUI.enemyImage.sprite = currentEnemy.enemyImage;
+        enemyStatsUI.enemyBackground.sprite = currentEnemy.enemyBackground;
         audioSource.Stop();
         audioSource.clip = currentEnemy.bossMusic;
         audioSource.Play();

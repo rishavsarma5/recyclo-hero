@@ -467,6 +467,7 @@ public class BattleSceneManager : MonoBehaviour
         {
             youWin.SetActive(true);
         }
+        enemy.audioSource.Stop();
     }
 
     /*
