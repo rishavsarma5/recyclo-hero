@@ -2271,6 +2271,7 @@ MonoBehaviour:
   spSliderText: {fileID: 1319668200}
   enemyName: {fileID: 598481181}
   enemyAttack: {fileID: 21640971}
+  enemyImage: {fileID: 713855509}
 --- !u!1001 &466946273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2659,7 +2660,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 7819c95792a064c80bcb4a4032699255, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.15
   m_Pitch: 1
@@ -4112,7 +4113,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2ca680ee7cd4c427b85e621050a31967, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b01dfec802d90734f9a8a45448b09366, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6410,6 +6411,7 @@ MonoBehaviour:
   heavyArmorDamageMultiplier: 0.8
   standardSpecialBarIncrease: 5
   noHeavyArmorSpecialBarIncrease: 7
+  audioSource: {fileID: 519420033}
   enemyTurnOver: 0
   attackRollOver: 0
 --- !u!1 &1303170323

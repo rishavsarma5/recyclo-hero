@@ -29,6 +29,8 @@ public class Enemy : Target
 
     Player player;
 
+    public AudioSource audioSource;
+
     //Animator animator;
     public bool enemyTurnOver;
     public bool attackRollOver;
@@ -56,6 +58,10 @@ public class Enemy : Target
         enemyStatsUI.DisplayLightShield(maxLightShield.CurrentValue);
         enemyStatsUI.DisplayHeavyArmor(maxHeavyArmor.CurrentValue);
         enemyStatsUI.enemyName.text = currentEnemy.enemyName;
+        enemyStatsUI.enemyImage.sprite = currentEnemy.enemyImage;
+        audioSource.Stop();
+        audioSource.clip = currentEnemy.bossMusic;
+        audioSource.Play();
         RemoveAttack();
         //animator = GetComponent<Animator>();
     }

@@ -12,6 +12,8 @@ public class EnemyUnit : ScriptableObject
 
     [Header("Visuals")] public Sprite enemyImage;
 
+    [Header("Audio")] public AudioClip bossMusic;
+
     [Header("HP Stats")] [Tooltip("Health Points")]
     public int health;
 

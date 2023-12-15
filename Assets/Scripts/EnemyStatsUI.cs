@@ -14,6 +14,7 @@ public class EnemyStatsUI : MonoBehaviour
     public TMP_Text spSliderText;
     public TMP_Text enemyName;
     public TMP_Text enemyAttack;
+    public Image enemyImage;
 
     public void DisplayHealth(int healthAmount)
     {
