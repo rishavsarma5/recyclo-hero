@@ -16,6 +16,7 @@ public class CET_Water : CardElement
             waterCoinBoost.SetTarget(player);
             waterCoinBoost.SetBattleSceneManager(battleSceneManager);
             waterCoinBoost.coinBonus = 2;
+            waterCoinBoost.turnDuration = 2;
             player.activeStatusEffects.Add(waterCoinBoost);
             return player;
         }

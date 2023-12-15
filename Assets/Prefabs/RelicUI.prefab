@@ -169,8 +169,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 32
+  m_fontSizeBase: 32
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -304,8 +304,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -403,6 +403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   relic: {fileID: 0}
   relicDescription: {fileID: 8063257762419336358}
+  relicName: {fileID: 6341658939671596083}
   relicImage: {fileID: 1065376216572530968}
 --- !u!222 &6315733153112113280
 CanvasRenderer:

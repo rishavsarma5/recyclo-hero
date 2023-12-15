@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Relic_BonusCoins
   m_EditorClassIdentifier: 
   relicName: Bonus Coins
-  relicDescription: Start Each Buy Phase with added coins.
+  relicDescription: Start Each Buy Phase with 2 added coins.
   relicImage: {fileID: 21300000, guid: 217bfa99d5fe34948bc4d533192ff7fa, type: 3}
   turnDuration: 0
   isPermanent: 1

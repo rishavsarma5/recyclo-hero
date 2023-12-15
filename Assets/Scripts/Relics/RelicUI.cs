@@ -7,6 +7,7 @@ public class RelicUI : MonoBehaviour
     public Relic relic;
 
     public TMP_Text relicDescription;
+    public TMP_Text relicName;
     public Image relicImage;
 
     //public GameObject discardEffect;
@@ -32,6 +33,7 @@ public class RelicUI : MonoBehaviour
     {
         relic = _relic;
         gameObject.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        relicName.text = relic.relicName;
         relicDescription.text = relic.relicDescription;
         relicImage.sprite = relic.relicImage;
     }
