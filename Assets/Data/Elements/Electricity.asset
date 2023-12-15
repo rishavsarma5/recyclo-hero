@@ -16,6 +16,7 @@ MonoBehaviour:
   description: Damage to heavy armor
   color: {r: 1, g: 0.97662324, b: 0, a: 1}
   relicBonus: 0
-  successMax: 0.8
+  successMax: 0.33
   player: {fileID: 0}
   enemy: {fileID: 0}
+  battleSceneManager: {fileID: 0}
