@@ -1,12 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class EnemyAction
+[CreateAssetMenu]
+public class EnemyAction : ScriptableObject
 {
-    public AttackType intentType;
-    public enum AttackType { NormalAttack, SpecialAttack }
+    public string actionName;
+    public string actionDescription;
+    public CardElement actionElement;
+
     public int diceSides;
     public int numAttacks;
     public int baseDamage;

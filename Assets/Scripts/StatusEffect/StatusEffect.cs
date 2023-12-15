@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class StatusEffect : ScriptableObject
@@ -28,7 +27,7 @@ public abstract class StatusEffect : ScriptableObject
         Debug.Log("decreasing turn in status effects");
         turnDuration--;
         
-        if (turnDuration == 0)
+        if (turnDuration <= 0)
         {
             RemoveEffect();
         }

@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class Enemy : Target
 {
-    public List<EnemyAction> enemyActions;
-    public List<EnemyAction> turns = new List<EnemyAction>();
+    public EnemyUnit currentEnemy;
     public int turnNumber = 0;
-    public bool shuffleActions;
-    public Enemy enemy;
-    public int currentHealth;
-    public int maxHealth;
-    public int currentLightShield;
-    public int maxLightShield;
-    public int currentHeavyArmor;
-    public int maxHeavyArmor;
+    public GlobalInt currentHealth;
+    public GlobalInt maxHealth;
+    public GlobalInt currentLightShield;
+    public GlobalInt maxLightShield;
+    public GlobalInt currentHeavyArmor;
+    public GlobalInt maxHeavyArmor;
 
     BattleSceneManager battleSceneManager;
     EnemyStatsUI enemyStatsUI;
@@ -28,33 +25,33 @@ public class Enemy : Target
     // Start is called before the first frame update
     void Awake()
     {
+        // Set enemy HP Stats
+        maxHealth.CurrentValue = currentEnemy.health;
+        currentHealth.CurrentValue = currentEnemy.health;
+
+        maxLightShield.CurrentValue = currentEnemy.lightShield;
+        currentLightShield.CurrentValue = currentEnemy.lightShield;
+
+        maxHeavyArmor.CurrentValue = currentEnemy.heavyArmor;
+        currentHeavyArmor.CurrentValue = currentEnemy.heavyArmor;
+
         battleSceneManager = FindObjectOfType<BattleSceneManager>();
         player = battleSceneManager.player;
-        enemy = FindObjectOfType<Enemy>();
         enemyStatsUI = FindObjectOfType<EnemyStatsUI>();
-        enemyStatsUI.healthSlider.maxValue = maxHealth;
-        enemyStatsUI.lightShieldSlider.maxValue = maxLightShield;
-        enemyStatsUI.heavyArmorSlider.maxValue = maxHeavyArmor;
-        enemyStatsUI.DisplayHealth(maxHealth);
-        enemyStatsUI.DisplayLightShield(maxLightShield);
-        enemyStatsUI.DisplayHeavyArmor(maxHeavyArmor);
+        enemyStatsUI.healthSlider.maxValue = maxHealth.CurrentValue;
+        enemyStatsUI.lightShieldSlider.maxValue = maxLightShield.CurrentValue;
+        enemyStatsUI.heavyArmorSlider.maxValue = maxHeavyArmor.CurrentValue;
+        enemyStatsUI.DisplayHealth(maxHealth.CurrentValue);
+        enemyStatsUI.DisplayLightShield(maxLightShield.CurrentValue);
+        enemyStatsUI.DisplayHeavyArmor(maxHeavyArmor.CurrentValue);
         //animator = GetComponent<Animator>();
-        GenerateTurns();
-}
-    public void GenerateTurns()
-    {
-        foreach (EnemyAction eA in enemyActions)
-        {
-            turns.Add(eA);
-        }
-        //turns.Shuffle();
     }
 
     public IEnumerator AttackPlayer()
     {
         battleSceneManager.numTurns++;
         //animator.Play("Attack");
-        EnemyAction ea = turns[turnNumber];
+        EnemyAction ea = currentEnemy.NextEnemyAction();
 
         for (int i = 0; i < ea.numAttacks; i++)
         {
@@ -63,21 +60,24 @@ public class Enemy : Target
             battleSceneManager.rollButtonText.gameObject.SetActive(true);
             battleSceneManager.rollButtonText.text = "";
             battleSceneManager.rollButtonText.text = $"Enemy did {totalDamage} to player.";
+            Debug.Log($"Enemy did {totalDamage} to player using {ea.actionName}.");
             player.TakeDamage(totalDamage);
             yield return new WaitForSeconds(0.5f);
         }
+
         WrapUpTurn();
     }
 
     private void WrapUpTurn()
     {
         turnNumber = 0;
-        
+
         if (battleSceneManager.numTurns % 6 == 0) // special attack
         {
             Debug.Log("special attack incoming!");
             turnNumber = 1;
         }
+
         Debug.Log($"Num turns is {battleSceneManager.numTurns} so turn number is {turnNumber}");
         enemyTurnOver = true;
     }
@@ -95,29 +95,30 @@ public class Enemy : Target
         Debug.Log($"enemy health takes leftover {amount} damage");
 
         TakeHealthDamage(amount);
-      
+
         FinishAttackRoll();
     }
 
     public int TakeHeavyArmorDamage(int amount)
     {
-        if (currentHeavyArmor > 0)
+        if (currentHeavyArmor.CurrentValue > 0)
         {
-            if (currentHeavyArmor >= amount)
+            if (currentHeavyArmor.CurrentValue >= amount)
             {
                 //block all
                 Debug.Log($"heavy armor blocks all {amount} damage");
-                currentHeavyArmor -= amount;
+                currentHeavyArmor.CurrentValue -= amount;
                 amount = 0;
             }
             else
             {
                 //cant block all
                 Debug.Log($"heavy armor blocks {currentHeavyArmor} damage");
-                amount -= currentHeavyArmor;
-                currentHeavyArmor = 0;
+                amount -= currentHeavyArmor.CurrentValue;
+                currentHeavyArmor.CurrentValue = 0;
             }
-            enemyStatsUI.DisplayHeavyArmor(currentHeavyArmor);
+
+            enemyStatsUI.DisplayHeavyArmor(currentHeavyArmor.CurrentValue);
         }
 
         return amount;
@@ -125,23 +126,24 @@ public class Enemy : Target
 
     public int TakeLightShieldDamage(int amount)
     {
-        if (amount > 0 && currentLightShield > 0)
+        if (amount > 0 && currentLightShield.CurrentValue > 0)
         {
-            if (currentLightShield >= amount)
+            if (currentLightShield.CurrentValue >= amount)
             {
                 //block all
                 Debug.Log($"light shield blocks rest {amount} damage");
-                currentLightShield -= amount;
+                currentLightShield.CurrentValue -= amount;
                 amount = 0;
             }
             else
             {
                 //cant block all
                 Debug.Log($"light shield blocks additional {currentLightShield} damage");
-                amount -= currentLightShield;
-                currentLightShield = 0;
+                amount -= currentLightShield.CurrentValue;
+                currentLightShield.CurrentValue = 0;
             }
-            enemyStatsUI.DisplayLightShield(currentLightShield);
+
+            enemyStatsUI.DisplayLightShield(currentLightShield.CurrentValue);
         }
 
         return amount;
@@ -152,43 +154,43 @@ public class Enemy : Target
         if (amount > 0)
         {
             Debug.Log($"enemy health takes leftover {amount} damage");
-            currentHealth -= amount;
-            enemyStatsUI.DisplayHealth(currentHealth);
+            currentHealth.CurrentValue -= amount;
+            enemyStatsUI.DisplayHealth(currentHealth.CurrentValue);
         }
 
-        if (currentHealth <= 0)
+        if (currentHealth.CurrentValue <= 0)
         {
             Debug.Log("enemy dead");
             battleSceneManager.EndFight(true);
             Destroy(gameObject);
         }
     }
-         
+
     public void TakeElementalDamage(Card card, int amount)
     {
         switch (card.GetCardElement())
         {
             case CET_Corrosion:
-                currentHealth -= amount;
+                currentHealth.CurrentValue -= amount;
                 Debug.Log($"Enemy took {amount} corrosive damage to health");
-                enemyStatsUI.DisplayHealth(currentHealth);
+                enemyStatsUI.DisplayHealth(currentHealth.CurrentValue);
                 break;
             case CET_Water:
-                currentLightShield = Mathf.Max(0, currentLightShield - amount);
+                currentLightShield.CurrentValue = Mathf.Max(0, currentLightShield.CurrentValue - amount);
                 Debug.Log($"Enemy took {amount} water damage to light shield");
-                enemyStatsUI.DisplayLightShield(currentLightShield);
+                enemyStatsUI.DisplayLightShield(currentLightShield.CurrentValue);
                 break;
             case CET_Electricity:
-                currentHeavyArmor = Mathf.Max(0, currentHeavyArmor - amount);
+                currentHeavyArmor.CurrentValue = Mathf.Max(0, currentHeavyArmor.CurrentValue - amount);
                 Debug.Log($"Enemy took {amount} electric damage to heavy armor");
-                enemyStatsUI.DisplayHeavyArmor(currentHeavyArmor);
+                enemyStatsUI.DisplayHeavyArmor(currentHeavyArmor.CurrentValue);
                 break;
             default:
                 Debug.Log("Should not get here");
                 break;
         }
 
-        if (currentHealth <= 0)
+        if (currentHealth.CurrentValue <= 0)
         {
             Debug.Log("enemy dead");
             battleSceneManager.EndFight(true);
@@ -199,16 +201,16 @@ public class Enemy : Target
 
     public void AddLightShield(int amount)
     {
-        currentLightShield += amount;
-        maxLightShield += amount;
-        enemyStatsUI.DisplayUpdatedLightShield(currentLightShield, maxLightShield);
+        currentLightShield.CurrentValue += amount;
+        maxLightShield.CurrentValue += amount;
+        enemyStatsUI.DisplayUpdatedLightShield(currentLightShield.CurrentValue, maxLightShield.CurrentValue);
     }
 
     public void AddHeavyArmor(int amount)
     {
-        currentHeavyArmor += amount;
-        maxHeavyArmor += amount;
-        enemyStatsUI.DisplayUpdatedHeavyArmor(currentHeavyArmor, maxHeavyArmor);
+        currentHeavyArmor.CurrentValue += amount;
+        maxHeavyArmor.CurrentValue += amount;
+        enemyStatsUI.DisplayUpdatedHeavyArmor(currentHeavyArmor.CurrentValue, maxHeavyArmor.CurrentValue);
     }
 
     private void FinishAttackRoll()

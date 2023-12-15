@@ -6121,25 +6121,14 @@ MonoBehaviour:
   isSPBoosted: 0
   isStunned: 0
   isSPNerfed: 0
-  enemyActions:
-  - intentType: 0
-    diceSides: 4
-    numAttacks: 1
-    baseDamage: 0
-  - intentType: 1
-    diceSides: 8
-    numAttacks: 2
-    baseDamage: 4
-  turns: []
+  currentEnemy: {fileID: 11400000, guid: 87aede363a14845b9ab6a4cc0844eca4, type: 2}
   turnNumber: 0
-  shuffleActions: 0
-  enemy: {fileID: 1274600823}
-  currentHealth: 10
-  maxHealth: 10
-  currentLightShield: 10
-  maxLightShield: 10
-  currentHeavyArmor: 10
-  maxHeavyArmor: 10
+  currentHealth: {fileID: 11400000, guid: 078506ca5d223410c92b2d0fcbad93be, type: 2}
+  maxHealth: {fileID: 11400000, guid: 158e11de43dc9412ead92e6336f2165b, type: 2}
+  currentLightShield: {fileID: 11400000, guid: c7c7ce83794d14e4fb4d5ec1feb3868c, type: 2}
+  maxLightShield: {fileID: 11400000, guid: b8bf949fb205a4787b2365c0ec84bdaf, type: 2}
+  currentHeavyArmor: {fileID: 11400000, guid: 25c908c787fbc404e885b94b2a45212e, type: 2}
+  maxHeavyArmor: {fileID: 11400000, guid: 25c908c787fbc404e885b94b2a45212e, type: 2}
   enemyTurnOver: 0
   attackRollOver: 0
 --- !u!1 &1303170323
@@ -6589,7 +6578,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1340567951
 RectTransform:
   m_ObjectHideFlags: 0

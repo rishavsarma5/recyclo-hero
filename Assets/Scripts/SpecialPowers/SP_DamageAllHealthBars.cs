@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
@@ -19,7 +17,7 @@ public class SP_DamageAllHealthBars : SpecialPowerOption
     public override void PerformAction()
     {
         enemy = FindObjectOfType<Enemy>();
-        if (enemy.currentHeavyArmor != 0)
+        if (enemy.currentHeavyArmor.CurrentValue != 0)
         {
             for (int i = 0; i < numAttacksPerHealthBar; i++)
             {
@@ -29,7 +27,7 @@ public class SP_DamageAllHealthBars : SpecialPowerOption
             }
         }
 
-        if (enemy.currentLightShield != 0)
+        if (enemy.currentLightShield.CurrentValue != 0)
         {
             for (int i = 0; i < numAttacksPerHealthBar; i++)
             {
@@ -39,7 +37,7 @@ public class SP_DamageAllHealthBars : SpecialPowerOption
             }
         }
 
-        if (enemy.currentHealth != 0)
+        if (enemy.currentHealth.CurrentValue != 0)
         {
             for (int i = 0; i < numAttacksPerHealthBar; i++)
             {
