@@ -11,7 +11,7 @@ public class BattleSceneManager : MonoBehaviour
     public List<CardUI> cardsDisplayed = new List<CardUI>();
     public List<SpecialPowerOption> playerSpecialPowerCards = new List<SpecialPowerOption>();
     public List<SpecialPowerOption> enemySpecialPowerMoves = new List<SpecialPowerOption>();
-
+    public List<RelicUI> relicsDisplayed = new List<RelicUI>();
     public List<SpecialPowerUI> playerSpecialPowerCardsDisplayed = new List<SpecialPowerUI>();
     //public List<string> activeRelics = new List<string>(); // Change to relic list
     //public List<string> deActiveRelics = new List<string>(); // Change to relic list
@@ -25,8 +25,10 @@ public class BattleSceneManager : MonoBehaviour
     public int playerStatusEffectSPChange;
     public int enemyStatusEffectSPChange;
     public int drawAmount = 5;
+    public int relicPickAmount = 3;
     public List<CardUI> itemsBought = new List<CardUI>();
     public int maxWeaponsBought = 2;
+    public int relicMaxWeaponsBonus;
     public int maxArmorBought = 1;
     public Turn turn;
 
@@ -39,13 +41,14 @@ public class BattleSceneManager : MonoBehaviour
     public Phase phase;
 
     [Header("UI")] public Button continueButton;
+    public TopBar topBar;
     public TMP_Text coinText;
     public Image coinImage;
     public Button rollButton;
     public TMP_Text rollButtonText;
     public Button cardActionButton;
     public GameObject specialPowerMenu;
-
+    public GameObject relicSelectMenu;
     public TMP_Text cardActionButtonText;
 
     public TMP_Text phaseText;
@@ -73,6 +76,7 @@ public class BattleSceneManager : MonoBehaviour
     public bool rollEnemySpecialPower;
     public bool specialPowerOptionChosen;
     public bool resetSpecialPowerLevel;
+    public bool startingRelicChosen;
     public int numTurns;
 
 
@@ -83,19 +87,38 @@ public class BattleSceneManager : MonoBehaviour
         player = FindObjectOfType<Player>();
         enemy = FindObjectOfType<Enemy>();
         spBar = FindObjectOfType<SpecialPower>();
+        topBar = FindObjectOfType<TopBar>();
         //endScreen = FindObjectOfType<EndScreen>();
         phase = Phase.PostTurnCleanup;
         numTurns = 1;
         relicCoinsBonus = 0;
+        relicMaxWeaponsBonus = 0;
         rollEnemySpecialPower = false;
         specialPowerOptionChosen = false;
         resetSpecialPowerLevel = false;
+        startingRelicChosen = false;
     }
 
     public void StartFight()
     {
         player.gameObject.SetActive(true);
         enemy.gameObject.SetActive(true);
+        StartCoroutine(ChooseStartingRelic());
+    }
+
+    public IEnumerator ChooseStartingRelic()
+    {
+        relicSelectMenu.SetActive(true);
+        gameManager.relics.Shuffle();
+        for (int i = 0; i < relicPickAmount; i++)
+        {
+            RelicUI relicUI = relicsDisplayed[i];
+            relicUI.LoadRelicUI(gameManager.relics[i]);
+            relicUI.gameObject.SetActive(true);
+        }
+
+        yield return new WaitUntil(() => startingRelicChosen);
+        startingRelicChosen = false;
         ContinueToNextPhase();
     }
 
@@ -109,7 +132,7 @@ public class BattleSceneManager : MonoBehaviour
         print($"Buy phase current coin boost: {waterSECoinBonus}");
         allItemsBought = false;
         maxArmorBought = 1;
-        maxWeaponsBought = 2;
+        maxWeaponsBought = 2 + relicMaxWeaponsBonus;
         itemsBought.Clear();
         coins = relicCoinsBonus;
         coinsRolled = false;
@@ -161,6 +184,7 @@ public class BattleSceneManager : MonoBehaviour
         DrawCards(drawAmount);
         
         enemy.GenerateAttack();
+        print($"weapons you can buy {maxWeaponsBought}");
         yield return new WaitUntil(() => allItemsBought);
         rollButtonText.gameObject.SetActive(false);
         coinImage.gameObject.SetActive(false);
@@ -423,7 +447,7 @@ public class BattleSceneManager : MonoBehaviour
         int value = Dice.DiceRoll(currDiceSides);
         if (phase == Phase.Buy)
         {
-            coins = value;
+            coins += value;
             Debug.Log($"Rolled for {value} coins.");
             coinsRolled = true;
         }

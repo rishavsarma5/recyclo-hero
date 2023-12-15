@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 21f22dc099cf9474284c9ba11d7ad3dc
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - relicImage: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  - battleSceneManager: {instanceID: 0}
+  - player: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
