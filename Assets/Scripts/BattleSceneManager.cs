@@ -279,6 +279,7 @@ public class BattleSceneManager : MonoBehaviour
         {
             enemy.enraged.CurrentValue = false;
         }
+
         if (!enemy.isStunned && !enemy.staggered.CurrentValue)
         {
             enemy.enemyTurnOver = false;
@@ -291,7 +292,7 @@ public class BattleSceneManager : MonoBehaviour
         {
             Debug.Log("Enemy is stunned. Skipping Enemy's Attack Phase.");
         }
-        
+
         enemy.ReduceEnemyStaggered();
         enemy.LightShieldHeal();
 
@@ -351,8 +352,9 @@ public class BattleSceneManager : MonoBehaviour
     public IEnumerator PerformEnemySpecialPower()
     {
         // shuffle the list of enemy's special powers and choose first
-        enemySpecialPowerMoves.Shuffle();
-        enemySpecialPowerMoves[0].PerformAction();
+        SpecialPowerOption enemySpecial =
+            enemy.currentEnemy.enemySpecialActions[Random.Range(0, enemy.currentEnemy.enemySpecialActions.Count)];
+        enemySpecial.PerformAction();
         yield return new WaitForSeconds(0.5f);
     }
 

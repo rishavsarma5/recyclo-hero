@@ -38,6 +38,8 @@ public class EnemyLogicCondition
         if (!currentValue || !maxValue) return false;
 
         float checkedValue = currentValue.CurrentValue / (float)maxValue.CurrentValue;
+        
+        Debug.Log($"Compare checkedValue = {checkedValue} and comparator = {comparator}");
 
         return comparator switch
         {
