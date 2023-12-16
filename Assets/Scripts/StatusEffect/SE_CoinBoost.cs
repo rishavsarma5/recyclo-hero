@@ -13,9 +13,6 @@ public class SE_CoinBoost : StatusEffect
         {
             throw new MissingReferenceException("target not set on status effect!");
         }
-        Debug.Log($"target: {target}");
-        Debug.Log($"battle scene  manager: {battleSceneManager}");
-        Debug.Log($"coin bonus: {coinBonus}");
 
         target.isCoinBoosted = true;
         battleSceneManager.waterSECoinBonus += coinBonus;
@@ -24,7 +21,6 @@ public class SE_CoinBoost : StatusEffect
 
     public override void RemoveEffect()
     {
-        Debug.Log($"removing status effect: coin boost");
         if (!target)
         {
             throw new MissingReferenceException("target not set on status effect!");

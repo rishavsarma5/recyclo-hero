@@ -26,7 +26,6 @@ public abstract class StatusEffect : ScriptableObject
     {
         Debug.Log("decreasing turn in status effects");
         turnDuration--;
-        Debug.Log($"decrease turn called, new turn duration: {turnDuration}");
 
         if (turnDuration <= 0)
         {
