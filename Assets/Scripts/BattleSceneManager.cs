@@ -47,6 +47,7 @@ public class BattleSceneManager : MonoBehaviour
     public Button rollButton;
     public TMP_Text rollButtonText;
     public Button cardActionButton;
+    public Image cardActionBackground;
     public GameObject cardMenu;
     public GameObject specialPowerMenu;
     public GameObject relicSelectMenu;
@@ -262,6 +263,7 @@ public class BattleSceneManager : MonoBehaviour
 
                 cardActionButton.gameObject.SetActive(false);
                 cardActionButtonText.gameObject.SetActive(false);
+                cardActionBackground.gameObject.SetActive(false);
                 yield return new WaitUntil(() => playerAttackOver);
                 playerAttackOver = false;
             }

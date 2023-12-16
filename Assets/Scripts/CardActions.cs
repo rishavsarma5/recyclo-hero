@@ -23,6 +23,7 @@ public class CardActions : MonoBehaviour
     {
         battleSceneManager.cardActionButton.gameObject.SetActive(true);
         battleSceneManager.cardActionButtonText.gameObject.SetActive(true);
+        battleSceneManager.cardActionBackground.gameObject.SetActive(true);
         cardActionOver = false;
         switch (card)
         {
