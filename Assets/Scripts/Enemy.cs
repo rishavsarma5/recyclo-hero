@@ -17,7 +17,9 @@ public class Enemy : Target
     public GlobalInt maxHeavyArmor;
 
     public GlobalBool enraged;
+    public GameObject enragedPanel;
     public GlobalBool staggered;
+    public GameObject staggeredPanel;
     public int staggeredTurnCount = -1;
 
     public int lightShieldHealAmount = 2;
@@ -157,6 +159,7 @@ public class Enemy : Target
                 amount -= currentHeavyArmor.CurrentValue;
                 currentHeavyArmor.CurrentValue = 0;
                 staggered.CurrentValue = true;
+                staggeredPanel.SetActive(true);
                 staggeredTurnCount = currentEnemy.staggeredTurns;
             }
 
@@ -184,6 +187,7 @@ public class Enemy : Target
                 amount -= currentLightShield.CurrentValue;
                 currentLightShield.CurrentValue = 0;
                 enraged.CurrentValue = true;
+                enragedPanel.SetActive(true);
             }
 
             enemyStatsUI.DisplayLightShield(currentLightShield.CurrentValue);
@@ -269,6 +273,7 @@ public class Enemy : Target
         if (staggeredTurnCount <= 0)
         {
             staggered.CurrentValue = false;
+            staggeredPanel.SetActive(false);
         }
     }
 

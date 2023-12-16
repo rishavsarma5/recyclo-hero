@@ -315,6 +315,7 @@ public class BattleSceneManager : MonoBehaviour
         if (enemy.isStunned)
         {
             enemy.enraged.CurrentValue = false;
+            enemy.enragedPanel.SetActive(false);
         }
 
         if (!enemy.isStunned && !enemy.staggered.CurrentValue)
