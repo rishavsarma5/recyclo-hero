@@ -47,11 +47,13 @@ public class BattleSceneManager : MonoBehaviour
     public Button rollButton;
     public TMP_Text rollButtonText;
     public Button cardActionButton;
+    public GameObject cardMenu;
     public GameObject specialPowerMenu;
     public GameObject relicSelectMenu;
     public TMP_Text cardActionButtonText;
 
     public TMP_Text phaseText;
+    public Animator bannerAnimator;
     //public Transform topParent;
     //public Transform enemyParent;
     //public EndScreen endScreen;
@@ -63,9 +65,7 @@ public class BattleSceneManager : MonoBehaviour
     CardActions cardActions;
     GameManager gameManager;
     SpecialPower spBar;
-    public Animator banner;
     public TMP_Text turnText;
-    public Image turnImage;
     public GameObject gameOver;
     public GameObject youWin;
     public int currDiceSides;
@@ -133,17 +133,15 @@ public class BattleSceneManager : MonoBehaviour
             enemy.SetupEnemy();
         }
 
-        print($"Buy phase current coin boost: {waterSECoinBonus}");
-        Debug.Log($"player coin boost status: {player.isCoinBoosted}");
+        turnText.text = "Player's Turn";
+        bannerAnimator.Play("BannerOut");
+
         allItemsBought = false;
         maxArmorBought = 1;
         maxWeaponsBought = 2 + relicMaxWeaponsBonus;
         itemsBought.Clear();
         coins = relicCoinsBonus;
         coinsRolled = false;
-        coinImage.gameObject.SetActive(true);
-        coinText.gameObject.SetActive(true);
-        coinText.text = coins.ToString();
 
         rollButton.gameObject.SetActive(true);
         rollButtonText.gameObject.SetActive(true);
@@ -151,14 +149,10 @@ public class BattleSceneManager : MonoBehaviour
         currDiceSides = 6;
         continueButton.gameObject.SetActive(false);
         yield return new WaitUntil(() => coinsRolled);
-        Debug.Log($"coins is now: {coins}");
         if (player.isCoinBoosted)
         {
             coins += waterSECoinBonus;
-            Debug.Log($"after boost, coins is now: {coins}");
         }
-
-        coinText.text = coins.ToString();
 
         foreach (CardUI cardUI in cardsDisplayed)
         {
@@ -168,33 +162,23 @@ public class BattleSceneManager : MonoBehaviour
         currentCards.Clear();
 
         rollButton.gameObject.SetActive(false);
+        rollButtonText.gameObject.SetActive(false);
         continueButton.gameObject.SetActive(true);
-        rollButtonText.text = "Choose items you want to use for the round:";
-        //rollButtonText.gameObject.SetActive(false);
-        //turnText.text = "Player's Turn";
-        //banner.Play("bannerOut");
-
-        //playerIcon.SetActive(true);
-
-        //GameObject newEnemy = Instantiate(prefabsArray[Random.Range(0, prefabsArray.Length)], enemyParent);
-        //endScreen = FindObjectOfType<EndScreen>();
-        //if (endScreen != null)
-        //    endScreen.gameObject.SetActive(false);
-
-        //Enemy[] eArr = FindObjectsOfType<Enemy>();
-        //enemies = new List<Enemy>();
-
 
         gameManager.inventory.Shuffle();
+        cardMenu.gameObject.SetActive(true);
+        coinImage.gameObject.SetActive(true);
+        coinText.gameObject.SetActive(true);
+        coinText.text = coins.ToString();
         DrawCards(drawAmount);
-        
+
         enemy.GenerateAttack();
-        print($"weapons you can buy {maxWeaponsBought}");
+
         yield return new WaitUntil(() => allItemsBought);
-        rollButtonText.gameObject.SetActive(false);
         coinImage.gameObject.SetActive(false);
         coinText.gameObject.SetActive(false);
-
+        
+        cardMenu.gameObject.SetActive(false);
         foreach (CardUI cardUI in cardsDisplayed)
         {
             cardUI.gameObject.SetActive(false);
@@ -214,7 +198,6 @@ public class BattleSceneManager : MonoBehaviour
 
     public void DisplayCardInHand(Card card)
     {
-        Debug.Log($"cardsDisplayedCount {cardsDisplayed.Count}, currentCardsCount {currentCards.Count}", this);
         CardUI cardUI = cardsDisplayed[currentCards.Count - 1];
         cardUI.LoadCard(card);
         cardUI.gameObject.SetActive(true);
@@ -257,11 +240,8 @@ public class BattleSceneManager : MonoBehaviour
 
     public IEnumerator AttackPhase()
     {
-        turnText.gameObject.SetActive(true);
-        turnImage.gameObject.SetActive(true);
-        turnText.text = "Player's Turn";
         continueButton.gameObject.SetActive(true);
-        //banner.Play("bannerIn");
+        
 
         if (!player.isStunned)
         {
@@ -274,10 +254,8 @@ public class BattleSceneManager : MonoBehaviour
             {
                 foreach (CardUI item in itemsBought)
                 {
-                    Debug.Log($"Using item {item}...");
                     item.gameObject.SetActive(true);
                     StartCoroutine(cardActions.PerformAction(item.card, enemy));
-                    //item.gameObject.SetActive(false);
                     yield return new WaitUntil(() => cardActions.cardActionOver);
                     item.gameObject.SetActive(false);
                 }
@@ -300,9 +278,9 @@ public class BattleSceneManager : MonoBehaviour
     private IEnumerator EnemyAttack()
     {
         turnText.text = "Enemy's Turn";
-        //banner.Play("bannerIn");
+        bannerAnimator.Play("BannerIn");
 
-        // yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.5f);
         /*
         foreach (Enemy enemy in enemies)
         {
@@ -341,8 +319,6 @@ public class BattleSceneManager : MonoBehaviour
 
     public IEnumerator SpecialPowerPhase()
     {
-        turnText.text = "Player's Turn";
-
         rollButton.gameObject.SetActive(true);
         rollButtonText.gameObject.SetActive(true);
         rollButtonText.text = "Roll d6 to increase special power bar:";
@@ -360,7 +336,6 @@ public class BattleSceneManager : MonoBehaviour
         continueButton.gameObject.SetActive(true);
         yield return new WaitUntil(() => rollEnemySpecialPower);
         rollEnemySpecialPower = false;
-        turnText.text = "Enemy's Turn";
         currDiceSides = enemy.currentHeavyArmor.CurrentValue <= 0
             ? enemy.noHeavyArmorSpecialBarIncrease
             : enemy.standardSpecialBarIncrease;
@@ -412,8 +387,6 @@ public class BattleSceneManager : MonoBehaviour
             enemy.activeStatusEffects[i].DecreaseTurn();
         }
 
-        turnText.gameObject.SetActive(false);
-        turnImage.gameObject.SetActive(false);
         yield return new WaitForSeconds(0.5f);
         ContinueToNextPhase();
     }
