@@ -13,6 +13,7 @@ public class BattleSceneManager : MonoBehaviour
     public List<SpecialPowerOption> enemySpecialPowerMoves = new List<SpecialPowerOption>();
     public List<RelicUI> relicsDisplayed = new List<RelicUI>();
     public List<SpecialPowerUI> playerSpecialPowerCardsDisplayed = new List<SpecialPowerUI>();
+    public List<BoughtItemUI> boughtItemSlots = new List<BoughtItemUI>();
     //public List<string> activeRelics = new List<string>(); // Change to relic list
     //public List<string> deActiveRelics = new List<string>(); // Change to relic list
 
@@ -172,6 +173,7 @@ public class BattleSceneManager : MonoBehaviour
         coinText.gameObject.SetActive(true);
         coinText.text = coins.ToString();
         DrawCards(drawAmount);
+        DisplayBoughtItemSlots();
 
         enemy.GenerateAttack();
 
@@ -183,6 +185,10 @@ public class BattleSceneManager : MonoBehaviour
         foreach (CardUI cardUI in cardsDisplayed)
         {
             cardUI.gameObject.SetActive(false);
+        }
+        foreach (BoughtItemUI slotUI in boughtItemSlots)
+        {
+            slotUI.gameObject.SetActive(false);
         }
 
         ContinueToNextPhase();
@@ -202,6 +208,14 @@ public class BattleSceneManager : MonoBehaviour
         CardUI cardUI = cardsDisplayed[currentCards.Count - 1];
         cardUI.LoadCard(card);
         cardUI.gameObject.SetActive(true);
+    }
+
+    public void DisplayBoughtItemSlots()
+    {
+        foreach (BoughtItemUI slotUI in boughtItemSlots)
+        {
+            slotUI.gameObject.SetActive(true);
+        }
     }
 
     public void ContinueToNextPhase()

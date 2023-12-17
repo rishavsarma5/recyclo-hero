@@ -1,8 +1,9 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class CardUI : MonoBehaviour
+public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public Card card;
     public TMP_Text cardTitleText;
@@ -13,6 +14,10 @@ public class CardUI : MonoBehaviour
 
     public Image cardImage;
     public Image cardTierImage;
+    public Image cardUIParentImage;
+    [HideInInspector] public Transform cardParentAfterDrag;
+    private RectTransform rectTransform;
+    private CanvasGroup canvasGroup;
 
     //public GameObject discardEffect;
     BattleSceneManager battleSceneManager;
@@ -21,6 +26,8 @@ public class CardUI : MonoBehaviour
     private void Awake()
     {
         battleSceneManager = FindObjectOfType<BattleSceneManager>();
+        rectTransform = GetComponent<RectTransform>();
+        canvasGroup = GetComponent<CanvasGroup>();
         //animator = GetComponent<Animator>();
     }
 
@@ -67,6 +74,30 @@ public class CardUI : MonoBehaviour
         {
             card.AddToInventory(battleSceneManager, this);
         }
+    }
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        Debug.Log("Begin Drag");
+        cardParentAfterDrag = transform.parent;
+        transform.SetParent(transform.root);
+        transform.SetAsLastSibling();
+        //cardUIParentImage.raycastTarget = false;
+        canvasGroup.blocksRaycasts = false;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        Debug.Log("On Drag");
+        //transform.position = Input.mousePosition;
+        rectTransform.anchoredPosition += eventData.delta;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        Debug.Log("End Drag");
+        transform.SetParent(cardParentAfterDrag);
+        //cardUIParentImage.raycastTarget = true;
+        canvasGroup.blocksRaycasts = true;
     }
 
     public void DeselectCard()

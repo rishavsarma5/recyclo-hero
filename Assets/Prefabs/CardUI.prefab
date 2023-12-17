@@ -766,6 +766,7 @@ GameObject:
   - component: {fileID: 4221507986224630288}
   - component: {fileID: 9153380218152383589}
   - component: {fileID: 6482762366197564258}
+  - component: {fileID: 4551441701525993607}
   - component: {fileID: 2670230560367211540}
   - component: {fileID: 8192583350802750305}
   m_Layer: 0
@@ -774,7 +775,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6027633515795869517
 RectTransform:
   m_ObjectHideFlags: 0
@@ -854,6 +855,20 @@ MonoBehaviour:
   cardTypeText: {fileID: 1792541266582029493}
   cardImage: {fileID: 1265602379139464613}
   cardTierImage: {fileID: 7149326823302853581}
+  cardUIParentImage: {fileID: 9153380218152383589}
+  cardParentAfterDrag: {fileID: 0}
+--- !u!225 &4551441701525993607
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5952413696157404833}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!114 &2670230560367211540
 MonoBehaviour:
   m_ObjectHideFlags: 0
