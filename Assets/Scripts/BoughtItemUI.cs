@@ -22,14 +22,13 @@ public class BoughtItemUI : MonoBehaviour, IDropHandler
     {
         Debug.Log("On Drop called");
         GameObject dropped = eventData.pointerDrag;
-        //Debug.Log($"dropped value is: {dropped}");
         CardUI cardPicked = dropped.GetComponent<CardUI>();
         cardPicked.cardParentAfterDrag = transform;
-        //Debug.Log($"cardui parent is: {cardPicked.transform.parent}");
         if (eventData.pointerDrag != null)
         {
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = this.GetComponent<RectTransform>().anchoredPosition;
         }
+        Debug.Log($"parent of card ui is now: {cardPicked.GetComponentInParent<BoughtItemUI>()}");
     }
 
     

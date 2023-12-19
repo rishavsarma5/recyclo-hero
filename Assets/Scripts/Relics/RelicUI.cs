@@ -15,18 +15,18 @@ public class RelicUI : MonoBehaviour
     GameManager gameManager;
     TopBar topBar;
 
-    // Animator animator;
+    Animator animator;
     private void Awake()
     {
         battleSceneManager = FindObjectOfType<BattleSceneManager>();
         gameManager = FindObjectOfType<GameManager>();
         topBar = FindObjectOfType<TopBar>();
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     private void OnEnable()
     {
-        //animator.Play("HoverOffCard");
+        animator.Play("RelicUIOffHover");
     }
 
     public void LoadRelicUI(Relic _relic)
@@ -53,6 +53,16 @@ public class RelicUI : MonoBehaviour
     public void AddRelicToTopBar()
     {
         topBar.AddRelicItem(relic);
+    }
+
+    public void OnHoverRelic()
+    {
+        animator.Play("RelicUIOnHover");
+    }
+
+    public void OffHoverRelic()
+    {
+        animator.Play("RelicUIOffHover");
     }
 
     public void TurnOffUI()

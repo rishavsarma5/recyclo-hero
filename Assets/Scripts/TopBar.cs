@@ -21,13 +21,13 @@ public class TopBar : MonoBehaviour
 
     public void AddRelicItem(Relic relic)
     {
-        GameObject newRelic = Instantiate(relicItem);
+        GameObject newRelic = Instantiate(relicItem, relicContainer);
         RelicTopBarItem relicItemInfo = newRelic.GetComponent<RelicTopBarItem>();
         relicItemInfo.relicImage = relic.relicImage;
         relicItemInfo.relicDescription = relic.relicDescription;
+        relicItemInfo.relicName = relic.relicName;
         topBarRelics[relic.relicDescription] = newRelic;
         newRelic.GetComponent<Image>().sprite = relic.relicImage;
-        DisplayRelics();
     }
 
     public void RemoveRelicItem(Relic relic)

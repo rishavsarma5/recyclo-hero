@@ -18,9 +18,11 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     [HideInInspector] public Transform cardParentAfterDrag;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
+    private bool pointerOnCard = false;
 
     //public GameObject discardEffect;
     BattleSceneManager battleSceneManager;
+    private Animator animator;
 
     // Animator animator;
     private void Awake()
@@ -28,12 +30,12 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         battleSceneManager = FindObjectOfType<BattleSceneManager>();
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
     }
 
     private void OnEnable()
     {
-        //animator.Play("HoverOffCard");
+        //animator.Play("CardUIOffHover");
     }
 
     public void LoadCard(Card _card)
@@ -109,14 +111,25 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void HoverCard()
     {
-        //if (battleSceneManager.selectedCard == null)
-        //animator.Play("HoverOnCard");
+        if (!pointerOnCard)
+        {
+            animator.Play("CardUIOnHover");
+            Debug.Log("hover on called");
+            pointerOnCard = true;
+        }
+            
     }
 
     public void DropCard()
     {
-        //if (battleSceneManager.selectedCard == null)
-        //animator.Play("HoverOffCard");
+        
+        if (pointerOnCard)
+        {
+            Debug.Log("hover off called");
+            animator.Play("CardUIOffHover");
+            pointerOnCard = false;
+        }
+            
     }
 
     public void HandleDrag()
