@@ -29,7 +29,12 @@ public abstract class Card : ScriptableObject
         battleSceneManager.itemsBought.Add(cardUI);
         battleSceneManager.coins -= GetCardTier();
         battleSceneManager.coinText.text = battleSceneManager.coins.ToString();
-        cardUI.gameObject.SetActive(false);
-        battleSceneManager.currentCards.Remove(this);
+    }
+
+    public virtual void RemoveFromInventory(BattleSceneManager battleSceneManager, CardUI cardUI)
+    {
+        battleSceneManager.itemsBought.Remove(cardUI);
+        battleSceneManager.coins += GetCardTier();
+        battleSceneManager.coinText.text = battleSceneManager.coins.ToString();
     }
 }

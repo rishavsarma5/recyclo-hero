@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IInitializePotentialDragHandler
 {
     public Card card;
     public TMP_Text cardTitleText;
@@ -14,11 +14,14 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public Image cardImage;
     public Image cardTierImage;
-    public Image cardUIParentImage;
-    [HideInInspector] public Transform cardParentAfterDrag;
+    public Transform cardParentMenu;
+    //[HideInInspector] public Transform cardParentAfterDrag;
+    public BoughtItemUI boughtItemSlotParent;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private bool pointerOnCard = false;
+    private Vector2 originalPosition;
+    private bool isDragged = false;
 
     //public GameObject discardEffect;
     BattleSceneManager battleSceneManager;
@@ -31,6 +34,10 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
         animator = GetComponent<Animator>();
+        originalPosition = rectTransform.anchoredPosition;
+        Debug.Log("original position:" + originalPosition);
+        //cardParentAfterDrag = null;
+        cardParentMenu = transform.parent;
     }
 
     private void OnEnable()
@@ -72,41 +79,102 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     public void SelectCard()
     {
         //Debug.Log("card is selected");
-        if (battleSceneManager.coins - card.GetCardTier() >= 0)
+        /*
+        if (cardParentAfterDrag != null && boughtItemSlotParent)
         {
-            card.AddToInventory(battleSceneManager, this);
+            Debug.Log("got here");
+            transform.SetParent(transform.parent);
+            Debug.Log("original position:" + originalPosition);
+            this.rectTransform.anchoredPosition = originalPosition;
+            cardParentAfterDrag = null;
+            boughtItemSlotParent = null;
+            card.RemoveFromInventory(battleSceneManager, this);
+        }
+        */
+        /*
+        if (boughtItemSlotParent)
+        {
+            Debug.Log("got here");
+            boughtItemSlotParent.cardInSlot = null;
+            transform.SetParent(transform.parent);
+            Debug.Log("original position:" + originalPosition);
+            this.rectTransform.anchoredPosition = originalPosition;
+            //cardParentAfterDrag = null;
+            boughtItemSlotParent = null;
+            card.RemoveFromInventory(battleSceneManager, this);
+        }
+        */
+    }
+
+    public void OnInitializePotentialDrag(PointerEventData eventData)
+    {
+        if (battleSceneManager.coins - card.GetCardTier() < 0)
+        {
+            // Cancel the potential drag
+            eventData.pointerDrag = null;
         }
     }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("Begin Drag");
-        cardParentAfterDrag = transform.parent;
-        transform.SetParent(transform.root);
-        transform.SetAsLastSibling();
-        //cardUIParentImage.raycastTarget = false;
-        canvasGroup.blocksRaycasts = false;
+        if (battleSceneManager.coins - card.GetCardTier() >= 0)
+        {
+            isDragged = true;
+            //transform.SetParent(transform.root);
+            //cardParentAfterDrag = transform.parent;
+            transform.SetAsLastSibling();
+            canvasGroup.blocksRaycasts = false;
+        } 
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         Debug.Log("On Drag");
-        //transform.position = Input.mousePosition;
         rectTransform.anchoredPosition += eventData.delta;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("End Drag");
-        transform.SetParent(cardParentAfterDrag);
-        //cardUIParentImage.raycastTarget = true;
-        canvasGroup.blocksRaycasts = true;
+        Debug.Log("End Drag called now");
+
+        if (!boughtItemSlotParent)
+        {
+            this.rectTransform.anchoredPosition = originalPosition;
+            canvasGroup.blocksRaycasts = true;
+        } else
+        {
+            canvasGroup.blocksRaycasts = true;
+        }
+
+        //AfterDragEnds();
+        isDragged = false;
+    }
+
+    public void AfterDragEnds()
+    {
+        if (isDragged && boughtItemSlotParent)
+        {
+            Debug.Log("this gets called here");
+            card.AddToInventory(battleSceneManager, this);
+            Debug.Log("BattleSceneManager bought Items List Count: " + battleSceneManager.itemsBought.Count);
+        }
     }
 
     public void DeselectCard()
     {
-        //Debug.Log("card is deselected");
         battleSceneManager.selectedCard = null;
-        //animator.Play("HoverOffCard");
+        if (boughtItemSlotParent)
+        {
+            Debug.Log("got here");
+            boughtItemSlotParent.cardInSlot = null;
+            transform.SetParent(transform.parent);
+            Debug.Log("original position:" + originalPosition);
+            this.rectTransform.anchoredPosition = originalPosition;
+            //cardParentAfterDrag = null;
+            boughtItemSlotParent = null;
+            card.RemoveFromInventory(battleSceneManager, this);
+        }
     }
 
     public void HoverCard()
@@ -117,7 +185,6 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
             Debug.Log("hover on called");
             pointerOnCard = true;
         }
-            
     }
 
     public void DropCard()
@@ -130,28 +197,5 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
             pointerOnCard = false;
         }
             
-    }
-
-    public void HandleDrag()
-    {
-    }
-
-    public void HandleEndDrag()
-    {
-        /*
-        if (battleSceneManager.energy < card.GetCardCostAmount())
-            return;
-
-        if (card.cardType == Card.CardType.Attack)
-        {
-            battleSceneManager.PlayCard(this);
-            animator.Play("HoverOffCard");
-        }
-        else if (card.cardType != Card.CardType.Attack)
-        {
-            animator.Play("HoverOffCard");
-            battleSceneManager.PlayCard(this);
-        }
-        */
     }
 }

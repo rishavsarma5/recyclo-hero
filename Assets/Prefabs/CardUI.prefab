@@ -876,8 +876,8 @@ MonoBehaviour:
   cardTypeText: {fileID: 1792541266582029493}
   cardImage: {fileID: 1265602379139464613}
   cardTierImage: {fileID: 7149326823302853581}
-  cardUIParentImage: {fileID: 9153380218152383589}
-  cardParentAfterDrag: {fileID: 0}
+  cardParentMenu: {fileID: 0}
+  boughtItemSlotParent: {fileID: 0}
 --- !u!225 &4551441701525993607
 CanvasGroup:
   m_ObjectHideFlags: 0

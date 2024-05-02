@@ -50,6 +50,7 @@ public class BattleSceneManager : MonoBehaviour
     public Button cardActionButton;
     public Image cardActionBackground;
     public GameObject cardMenu;
+    public GameObject cardMenuParts;
     public GameObject specialPowerMenu;
     public GameObject relicSelectMenu;
     public TMP_Text cardActionButtonText;
@@ -169,6 +170,7 @@ public class BattleSceneManager : MonoBehaviour
 
         gameManager.inventory.Shuffle();
         cardMenu.gameObject.SetActive(true);
+        cardMenuParts.gameObject.SetActive(true);
         coinImage.gameObject.SetActive(true);
         coinText.gameObject.SetActive(true);
         coinText.text = coins.ToString();
@@ -182,6 +184,7 @@ public class BattleSceneManager : MonoBehaviour
         coinText.gameObject.SetActive(false);
         
         cardMenu.gameObject.SetActive(false);
+        cardMenuParts.gameObject.SetActive(false);
         foreach (CardUI cardUI in cardsDisplayed)
         {
             cardUI.gameObject.SetActive(false);

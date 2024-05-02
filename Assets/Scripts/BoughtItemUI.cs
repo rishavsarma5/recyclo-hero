@@ -5,30 +5,25 @@ using UnityEngine.EventSystems;
 
 public class BoughtItemUI : MonoBehaviour, IDropHandler
 {
+    Vector2 anchoredPosition;
+    public CardUI cardInSlot;
+    BattleSceneManager battleSceneManager;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-
+        anchoredPosition = this.GetComponent<RectTransform>().anchoredPosition;
+        battleSceneManager = FindObjectOfType<BattleSceneManager>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("On Drop called");
+        Debug.Log("On Drop On BoughtItemUI called now");
         GameObject dropped = eventData.pointerDrag;
-        CardUI cardPicked = dropped.GetComponent<CardUI>();
-        cardPicked.cardParentAfterDrag = transform;
-        if (eventData.pointerDrag != null)
-        {
-            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = this.GetComponent<RectTransform>().anchoredPosition;
-        }
-        Debug.Log($"parent of card ui is now: {cardPicked.GetComponentInParent<BoughtItemUI>()}");
+        Debug.Log("on drop game object: " + dropped);
+        cardInSlot = dropped.GetComponent<CardUI>();
+        cardInSlot.boughtItemSlotParent = this;
+        //cardPicked.cardParentAfterDrag = this.transform;
+        cardInSlot.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
+        cardInSlot.card.AddToInventory(battleSceneManager, cardInSlot);
     }
 
     
