@@ -20,10 +20,12 @@ public class BoughtItemUI : MonoBehaviour, IDropHandler
         GameObject dropped = eventData.pointerDrag;
         Debug.Log("on drop game object: " + dropped);
         cardInSlot = dropped.GetComponent<CardUI>();
+        Debug.Log("on drop card ui : " + cardInSlot);
         cardInSlot.boughtItemSlotParent = this;
         //cardPicked.cardParentAfterDrag = this.transform;
         cardInSlot.GetComponent<RectTransform>().anchoredPosition = anchoredPosition;
         cardInSlot.card.AddToInventory(battleSceneManager, cardInSlot);
+        Debug.Log("BattleSceneManager in boughtUI bought Items List Count: " + battleSceneManager.itemsBought.Count);
     }
 
     

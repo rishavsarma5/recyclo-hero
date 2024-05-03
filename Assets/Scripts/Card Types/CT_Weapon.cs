@@ -17,4 +17,12 @@ public class CT_Weapon : Card
 
         base.AddToInventory(battleSceneManager, cardUI);
     }
+
+    public override void RemoveFromInventory(BattleSceneManager battleSceneManager, CardUI cardUI)
+    {
+        //if (battleSceneManager.maxWeaponsBought <= 0) return;
+        battleSceneManager.maxWeaponsBought++;
+
+        base.RemoveFromInventory(battleSceneManager, cardUI);
+    }
 }

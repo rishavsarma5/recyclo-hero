@@ -14,6 +14,7 @@ public class BattleSceneManager : MonoBehaviour
     public List<RelicUI> relicsDisplayed = new List<RelicUI>();
     public List<SpecialPowerUI> playerSpecialPowerCardsDisplayed = new List<SpecialPowerUI>();
     public List<BoughtItemUI> boughtItemSlots = new List<BoughtItemUI>();
+    public List<Vector2> cardUIOriginalPositions = new List<Vector2>();
     //public List<string> activeRelics = new List<string>(); // Change to relic list
     //public List<string> deActiveRelics = new List<string>(); // Change to relic list
 
@@ -100,6 +101,12 @@ public class BattleSceneManager : MonoBehaviour
         specialPowerOptionChosen = false;
         resetSpecialPowerLevel = false;
         startingRelicChosen = false;
+
+        foreach (CardUI cardUI in cardsDisplayed)
+        {
+            cardUIOriginalPositions.Add(cardUI.GetComponent<RectTransform>().anchoredPosition);
+            //Debug.Log("Card UI Rect transform anchored position: " + cardUIOriginalPositions[-1].anchoredPosition);
+        }
     }
 
     public void StartFight()
@@ -404,6 +411,13 @@ public class BattleSceneManager : MonoBehaviour
         for (int i = enemy.activeStatusEffects.Count - 1; i >= 0; i--)
         {
             enemy.activeStatusEffects[i].DecreaseTurn();
+        }
+
+        for (int i = cardsDisplayed.Count - 1; i >= 0; i--)
+        {
+            cardsDisplayed[i].GetComponent<RectTransform>().anchoredPosition = cardUIOriginalPositions[i];
+            cardsDisplayed[i].boughtItemSlotParent = null;
+            Debug.Log("Cards displayed rect transform set to: " + cardUIOriginalPositions[i]);
         }
 
         yield return new WaitForSeconds(0.5f);

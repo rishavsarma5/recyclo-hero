@@ -35,6 +35,7 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         canvasGroup = GetComponent<CanvasGroup>();
         animator = GetComponent<Animator>();
         originalPosition = rectTransform.anchoredPosition;
+        this.rectTransform.anchoredPosition = originalPosition;
         Debug.Log("original position:" + originalPosition);
         //cardParentAfterDrag = null;
         cardParentMenu = transform.parent;
@@ -167,13 +168,14 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         if (boughtItemSlotParent)
         {
             Debug.Log("got here");
+            Debug.Log("On deselect called");
             boughtItemSlotParent.cardInSlot = null;
             transform.SetParent(transform.parent);
-            Debug.Log("original position:" + originalPosition);
             this.rectTransform.anchoredPosition = originalPosition;
             //cardParentAfterDrag = null;
             boughtItemSlotParent = null;
             card.RemoveFromInventory(battleSceneManager, this);
+            Debug.Log("BattleSceneManager in cardUI bought Items List Count: " + battleSceneManager.itemsBought.Count);
         }
     }
 

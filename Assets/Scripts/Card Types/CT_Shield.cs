@@ -16,4 +16,12 @@ public class CT_Shield : Card
 
         base.AddToInventory(battleSceneManager, cardUI);
     }
+
+    public override void RemoveFromInventory(BattleSceneManager battleSceneManager, CardUI cardUI)
+    {
+        //if (battleSceneManager.maxArmorBought <= 0) return;
+        battleSceneManager.maxArmorBought++;
+
+        base.RemoveFromInventory(battleSceneManager, cardUI);
+    }
 }
