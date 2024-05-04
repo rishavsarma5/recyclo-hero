@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Collections;
 
 public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IInitializePotentialDragHandler
 {
@@ -15,13 +16,13 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     public Image cardImage;
     public Image cardTierImage;
     public Transform cardParentMenu;
-    //[HideInInspector] public Transform cardParentAfterDrag;
     public BoughtItemUI boughtItemSlotParent;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
     private bool pointerOnCard = false;
-    private Vector2 originalPosition;
-    private bool isDragged = false;
+    public Vector2 originalPosition;
+    private bool hasBeenDragged = false;
+    private BoughtItemUI hoveredSlot;
 
     //public GameObject discardEffect;
     BattleSceneManager battleSceneManager;
@@ -37,13 +38,7 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         originalPosition = rectTransform.anchoredPosition;
         this.rectTransform.anchoredPosition = originalPosition;
         Debug.Log("original position:" + originalPosition);
-        //cardParentAfterDrag = null;
         cardParentMenu = transform.parent;
-    }
-
-    private void OnEnable()
-    {
-        //animator.Play("CardUIOffHover");
     }
 
     public void LoadCard(Card _card)
@@ -80,35 +75,13 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     public void SelectCard()
     {
         //Debug.Log("card is selected");
-        /*
-        if (cardParentAfterDrag != null && boughtItemSlotParent)
-        {
-            Debug.Log("got here");
-            transform.SetParent(transform.parent);
-            Debug.Log("original position:" + originalPosition);
-            this.rectTransform.anchoredPosition = originalPosition;
-            cardParentAfterDrag = null;
-            boughtItemSlotParent = null;
-            card.RemoveFromInventory(battleSceneManager, this);
-        }
-        */
-        /*
-        if (boughtItemSlotParent)
-        {
-            Debug.Log("got here");
-            boughtItemSlotParent.cardInSlot = null;
-            transform.SetParent(transform.parent);
-            Debug.Log("original position:" + originalPosition);
-            this.rectTransform.anchoredPosition = originalPosition;
-            //cardParentAfterDrag = null;
-            boughtItemSlotParent = null;
-            card.RemoveFromInventory(battleSceneManager, this);
-        }
-        */
+        hasBeenDragged = false;
     }
 
     public void OnInitializePotentialDrag(PointerEventData eventData)
     {
+        if (boughtItemSlotParent) return;
+        
         if (battleSceneManager.coins - card.GetCardTier() < 0)
         {
             // Cancel the potential drag
@@ -118,65 +91,50 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("Begin Drag");
-        if (battleSceneManager.coins - card.GetCardTier() >= 0)
-        {
-            isDragged = true;
-            //transform.SetParent(transform.root);
-            //cardParentAfterDrag = transform.parent;
-            transform.SetAsLastSibling();
-            canvasGroup.blocksRaycasts = false;
-        } 
+        Debug.Log("Begin Drag called on " + this);
+        transform.SetAsLastSibling();
+        canvasGroup.blocksRaycasts = false;
+        hasBeenDragged = true;
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("On Drag");
+        Debug.Log("On Drag called on " + this);
         rectTransform.anchoredPosition += eventData.delta;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("End Drag called now");
+        Debug.Log("End Drag called on " + this);
 
-        if (!boughtItemSlotParent)
+        if (!boughtItemSlotParent) // if card not moved to a bought item slot
         {
             this.rectTransform.anchoredPosition = originalPosition;
             canvasGroup.blocksRaycasts = true;
-        } else
+        } else // card was moved to a bought item slot
         {
             canvasGroup.blocksRaycasts = true;
         }
-
-        //AfterDragEnds();
-        isDragged = false;
-    }
-
-    public void AfterDragEnds()
-    {
-        if (isDragged && boughtItemSlotParent)
-        {
-            Debug.Log("this gets called here");
-            card.AddToInventory(battleSceneManager, this);
-            Debug.Log("BattleSceneManager bought Items List Count: " + battleSceneManager.itemsBought.Count);
-        }
+        StartCoroutine(DelayedDeselectCard());
     }
 
     public void DeselectCard()
     {
+        Debug.Log("On deselect called on " + this);
         battleSceneManager.selectedCard = null;
-        if (boughtItemSlotParent)
-        {
-            Debug.Log("got here");
-            Debug.Log("On deselect called");
+        if (boughtItemSlotParent && !hasBeenDragged) { 
             boughtItemSlotParent.cardInSlot = null;
             transform.SetParent(transform.parent);
             this.rectTransform.anchoredPosition = originalPosition;
-            //cardParentAfterDrag = null;
             boughtItemSlotParent = null;
             card.RemoveFromInventory(battleSceneManager, this);
-            Debug.Log("BattleSceneManager in cardUI bought Items List Count: " + battleSceneManager.itemsBought.Count);
         }
+    }
+
+    public IEnumerator DelayedDeselectCard()
+    {
+        yield return new WaitForEndOfFrame(); // Wait until the end of the frame
+        DeselectCard(); // Deselect the card
     }
 
     public void HoverCard()

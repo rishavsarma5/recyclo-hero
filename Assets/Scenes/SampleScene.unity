@@ -405,6 +405,7 @@ MonoBehaviour:
   - {fileID: 960365828}
   - {fileID: 1193427822}
   - {fileID: 611284656}
+  cardUIOriginalPositions: []
   enemy: {fileID: 1274600823}
   player: {fileID: 362167226}
   coins: 0
@@ -2607,7 +2608,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -4379,6 +4380,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Armor Slot 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4149973161500262580, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
+      propertyPath: allowedCardType
+      value: A
+      objectReference: {fileID: 0}
     - target: {fileID: 5734637744730748008, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
       propertyPath: m_text
       value: Armor Pack
@@ -4417,7 +4422,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5734637745290564512, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5734637745290564512, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
       propertyPath: m_AnchorMax.x
@@ -7231,6 +7236,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Weapon Slot 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4149973161500262580, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
+      propertyPath: allowedCardType
+      value: W
+      objectReference: {fileID: 0}
     - target: {fileID: 5734637745290564512, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -7241,7 +7250,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5734637745290564512, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5734637745290564512, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
       propertyPath: m_AnchorMax.x
@@ -7538,7 +7547,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -8062,6 +8071,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Weapon Slot 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4149973161500262580, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
+      propertyPath: allowedCardType
+      value: W
+      objectReference: {fileID: 0}
     - target: {fileID: 5734637744730748008, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
       propertyPath: m_text
       value: Weapon 2
@@ -8100,7 +8113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5734637745290564512, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5734637745290564512, guid: 87adb36a8c63a3a469990c111a9db673, type: 3}
       propertyPath: m_AnchorMax.x
@@ -9805,14 +9818,14 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1817270618}
+  - {fileID: 960365827}
+  - {fileID: 1193427821}
+  - {fileID: 611284654}
   - {fileID: 4112063553965023289}
   - {fileID: 2082209913}
   - {fileID: 997342733}
   - {fileID: 466946274}
   - {fileID: 1664416421}
-  - {fileID: 960365827}
-  - {fileID: 1193427821}
-  - {fileID: 611284654}
   m_Father: {fileID: 480150495}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10268,7 +10281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -12480,7 +12493,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_AnchorMax.x
@@ -13276,7 +13289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6027633515795869517, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_AnchorMax.x
