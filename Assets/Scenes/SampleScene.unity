@@ -13365,11 +13365,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_Delegates.Array.data[4].eventID
-      value: 13
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
+      propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_Delegates.Array.data[4].callback.m_PersistentCalls.m_Calls.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -13377,7 +13381,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_Delegates.Array.data[4].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -13386,7 +13390,7 @@ PrefabInstance:
     - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_Delegates.Array.data[4].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6482762366197564258, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
+      objectReference: {fileID: 4112063553965023290}
     - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
@@ -13397,7 +13401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_Delegates.Array.data[4].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DropCard
+      value: HoverCard
       objectReference: {fileID: 0}
     - target: {fileID: 8192583350802750305, guid: 9ae8224d7e2581243822d86fcbb4a2c5, type: 3}
       propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName

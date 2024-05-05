@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IInitializePotentialDragHandler
+public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IInitializePotentialDragHandler, IDropHandler, IPointerEnterHandler
 {
     public Card card;
     public TMP_Text cardTitleText;
@@ -22,7 +22,7 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     private bool pointerOnCard = false;
     public Vector2 originalPosition;
     private bool hasBeenDragged = false;
-    private BoughtItemUI hoveredSlot;
+    public BoughtItemUI hoveredSlot;
 
     //public GameObject discardEffect;
     BattleSceneManager battleSceneManager;
@@ -137,7 +137,20 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
         DeselectCard(); // Deselect the card
     }
 
-    public void HoverCard()
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (hoveredSlot == null)
+            return;
+
+        hoveredSlot.PerformSwap(eventData);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        HoverCard(eventData);
+    }
+
+    public void HoverCard(PointerEventData pointerEventData)
     {
         if (!pointerOnCard)
         {
@@ -145,6 +158,9 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
             Debug.Log("hover on called");
             pointerOnCard = true;
         }
+
+        hoveredSlot = pointerEventData.pointerEnter.GetComponent<BoughtItemUI>();
+        Debug.Log("Hovering over: " + hoveredSlot);
     }
 
     public void DropCard()
@@ -156,6 +172,9 @@ public class CardUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
             animator.Play("CardUIOffHover");
             pointerOnCard = false;
         }
-            
+
+        hoveredSlot = null;
     }
+
+    
 }

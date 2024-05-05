@@ -878,6 +878,7 @@ MonoBehaviour:
   cardTierImage: {fileID: 7149326823302853581}
   cardParentMenu: {fileID: 0}
   boughtItemSlotParent: {fileID: 0}
+  originalPosition: {x: 0, y: 0}
 --- !u!225 &4551441701525993607
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -970,22 +971,6 @@ MonoBehaviour:
         - m_Target: {fileID: 6482762366197564258}
           m_TargetAssemblyTypeName: CardUI, Assembly-CSharp
           m_MethodName: DeselectCard
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 6482762366197564258}
-          m_TargetAssemblyTypeName: CardUI, Assembly-CSharp
-          m_MethodName: HoverCard
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

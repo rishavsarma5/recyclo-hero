@@ -416,8 +416,12 @@ public class BattleSceneManager : MonoBehaviour
         for (int i = cardsDisplayed.Count - 1; i >= 0; i--)
         {
             cardsDisplayed[i].GetComponent<RectTransform>().anchoredPosition = cardUIOriginalPositions[i];
-            cardsDisplayed[i].boughtItemSlotParent.cardInSlot = null;
-            cardsDisplayed[i].boughtItemSlotParent = null;
+            if (cardsDisplayed[i].boughtItemSlotParent)
+            {
+                cardsDisplayed[i].boughtItemSlotParent.cardInSlot = null;
+                cardsDisplayed[i].boughtItemSlotParent = null;
+            }
+            
             Debug.Log("Cards displayed rect transform set to: " + cardUIOriginalPositions[i]);
         }
 
